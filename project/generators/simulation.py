@@ -36,7 +36,6 @@ class TimeSimulation:
             }
 
         self.blue_line = Line(Line.colors.blue, self.raw_df[self.raw_df["BLUE"]])
-
         #self.red_line = self._build_line_data(self.raw_df[self.raw_df["RED"]])
         #self.brown_line = self._build_line_data(self.raw_df[self.raw_df["BRN"]])
         #self.green_line = self._build_line_data(self.raw_df[self.raw_df["G"]])
@@ -46,14 +45,17 @@ class TimeSimulation:
         #self.orange_line = self._build_line_data(self.raw_df[self.raw_df["O"]])
 
     def run(self):
+        import pprint
+        curr_time = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0,
+                microsecond=0)
         try:
-            curr_time = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0,
-                    microsecond=0)
             while True:
                 dow = curr_time.weekday()
                 print(f"simulation running.. {curr_time.isoformat()}, hour: {curr_time.hour}")
+                pprint.pprint(self.blue_line)
                 curr_time = curr_time + datetime.timedelta(minutes=3)
                 time.sleep(1)
+                self.blue_line.advance()
         except KeyboardInterrupt as e:
             print("Shutting down")
 

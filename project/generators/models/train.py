@@ -21,3 +21,6 @@ class Train:
 
     def __repr__(self):
         return str(self)
+
+    def broken(self):
+        return self.status == Train.status.broken_down
