@@ -26,6 +26,12 @@ class Stations:
         self.pink_line = self._build_line_data(self.raw_df[self.raw_df["Pnk"]])
         self.orange_line = self._build_line_data(self.raw_df[self.raw_df["O"]])
 
+
+    def _build_linked_list(self, stations):
+        """Transforms a list of stations into a linked list of stations with ordering"""
+        # TODO
+        return stations
+
     def _build_line_data(self, station_df):
         line = {
             "stations": {},
