@@ -19,6 +19,8 @@ class Line:
         self.color = color
         self.num_trains = num_trains
         self.stations = self._build_line_data(station_data)
+        # We must always discount the terminal station at the end of each direction
+        self.num_stations = len(self.stations) - 1
         self.trains = self._build_trains()
 
     def _build_line_data(self, station_df):
@@ -39,7 +41,8 @@ class Line:
         curr_loc = 0
         b_dir = True
         for train_id in range(self.num_trains):
-            train = Train(f"{self.color.name[0].upper()}L{train_id}", Train.status.in_service)
+            tid = str(train_id).zfill(3)
+            train = Train(f"{self.color.name[0].upper()}L{tid}", Train.status.in_service)
             trains.append(train)
 
             if b_dir:
@@ -113,16 +116,16 @@ class Line:
     def _get_next_idx(self, curr_index, b_direction, step_size=None):
         """Calculates the next station index. Returns next index and if it is b direction"""
         if step_size is None:
-            step_size = int((len(self.stations) * Line.num_directions)/self.num_trains)
+            step_size = int((self.num_stations * Line.num_directions)/self.num_trains)
         if b_direction is True:
             next_index = curr_index + step_size
-            if next_index < len(self.stations):
+            if next_index < self.num_stations:
                 return next_index, True
             else:
-                return len(self.stations) - (next_index % len(self.stations)) - 1, False
+                return self.num_stations - (next_index % self.num_stations), False
         else:
             next_index = curr_index - step_size
-            if next_index >= 0:
+            if next_index > 0:
                 return next_index, False
             else:
                 return abs(next_index), True
