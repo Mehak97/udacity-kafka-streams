@@ -24,3 +24,8 @@ class Train:
 
     def broken(self):
         return self.status == Train.status.broken_down
+
+    def arrive(self, station):
+        """Callback for when a train arrives at a particular station"""
+        logger.info(f"{self} has arrived at {station}")
+

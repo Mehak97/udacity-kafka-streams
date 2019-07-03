@@ -29,6 +29,8 @@ class Station:
 
     def arrive_a(self, train):
         self.a_train = train
+        self.a_train.arrive(self)
 
     def arrive_b(self, train):
         self.b_train = train
+        self.b_train.arrive(self)

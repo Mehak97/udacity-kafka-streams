@@ -4,11 +4,19 @@ generators
 import datetime
 import time
 from enum import IntEnum
+import logging
+import logging.config
 import os
 
 import pandas as pd
 
+# Import logging before models to ensure configuration is picked up
+logging.config.fileConfig(f"{os.path.dirname(os.path.abspath(__file__))}/logging.ini")
+
 from models import Line
+
+
+logger = logging.getLogger(__name__)
 
 
 class TimeSimulation:
@@ -45,19 +53,19 @@ class TimeSimulation:
         #self.orange_line = self._build_line_data(self.raw_df[self.raw_df["O"]])
 
     def run(self):
-        import pprint
+        #import pprint
         curr_time = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0,
                 microsecond=0)
         try:
             while True:
                 dow = curr_time.weekday()
-                print(f"simulation running.. {curr_time.isoformat()}, hour: {curr_time.hour}")
-                pprint.pprint(self.blue_line)
+                logger.info(f"simulation running.. {curr_time.isoformat()}, hour: {curr_time.hour}")
+                #pprint.pprint(self.blue_line)
                 curr_time = curr_time + datetime.timedelta(minutes=3)
                 time.sleep(1)
                 self.blue_line.advance()
         except KeyboardInterrupt as e:
-            print("Shutting down")
+            logger.info("Shutting down")
 
 
 if __name__ == "__main__":
