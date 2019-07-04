@@ -8,7 +8,8 @@ logger = logging.getLogger(__name__)
 class Station:
     """Defines a single station"""
 
-    def __init__(self, name, direction_a=None, direction_b=None):
+    def __init__(self, station_id, name, direction_a=None, direction_b=None):
+        self.station_id = station_id
         self.name = name
         self.dir_a = direction_a
         self.dir_b = direction_b
@@ -16,7 +17,8 @@ class Station:
         self.b_train = None
 
     def __str__(self):
-        return "Station | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(
+        return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(
+            self.station_id,
             self.name,
             self.a_train.train_id if self.a_train is not None else "---",
             self.dir_a.name if self.dir_a is not None else "---",

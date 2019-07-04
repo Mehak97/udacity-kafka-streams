@@ -26,10 +26,13 @@ class Line:
     def _build_line_data(self, station_df):
         """Constructs all stations on the line"""
         stations = station_df["STATION_NAME"].unique()
-        line = [Station(stations[0])]
+
+        station_data = station_df[station_df["STATION_NAME"] == stations[0]]
+        line = [Station(station_data["MAP_ID"].unique()[0], stations[0])]
         prev_station = line[0]
         for station in stations[1:]:
-            new_station = Station(station, prev_station)
+            station_data = station_df[station_df["STATION_NAME"] == station]
+            new_station = Station(station_data["MAP_ID"].unique()[0], station, prev_station)
             prev_station.dir_b = new_station
             prev_station = new_station
             line.append(new_station)
@@ -61,20 +64,38 @@ class Line:
 
         trains_advanced = 0
         while trains_advanced < self.num_trains - 1:
+            # The train departs the current station
+            if b_direction is True:
+                self.stations[curr_index].b_train = None
+            else:
+                self.stations[curr_index].a_train = None
+
+            # Advance this train to the next station
+            curr_index, b_direction = self._get_next_idx(curr_index, b_direction, step_size=1)
+            if b_direction is True:
+                self.stations[curr_index].arrive_b(curr_train)
+            else:
+                self.stations[curr_index].arrive_a(curr_train)
+
+            # Find the next train to advance
             move = 1 if b_direction else -1
             next_train, curr_index, b_direction = self._next_train(curr_index+move, b_direction)
             if b_direction is True:
-                next_train = self.stations[curr_index].b_train
-                self.stations[curr_index].arrive_b(curr_train)
+                curr_train = self.stations[curr_index].b_train
             else:
-                next_train = self.stations[curr_index].a_train
-                self.stations[curr_index].arrive_a(curr_train)
+                curr_train = self.stations[curr_index].a_train
 
             curr_train = next_train
             trains_advanced += 1
 
+        # The last train departs the current station
+        if b_direction is True:
+            self.stations[curr_index].b_train = None
+        else:
+            self.stations[curr_index].a_train = None
+
         # Advance last train to the next station
-        curr_index, b_direction = self._get_next_idx(curr_index, b_direction)
+        curr_index, b_direction = self._get_next_idx(curr_index, b_direction, step_size=1)
         if b_direction is True:
             self.stations[curr_index].arrive_b(curr_train)
         else:

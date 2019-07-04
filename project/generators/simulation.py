@@ -28,7 +28,7 @@ class TimeSimulation:
         # Read data from disk
         self.raw_df = pd.read_csv(
             f"{os.path.dirname(os.path.abspath(__file__))}/data/cta_stations.csv"
-        ).sort_values("STOP_ID")
+        ).sort_values("MAP_ID")
 
         # Define the train schedule (same for all trains)
         self.schedule = schedule
@@ -53,14 +53,14 @@ class TimeSimulation:
         #self.orange_line = self._build_line_data(self.raw_df[self.raw_df["O"]])
 
     def run(self):
-        #import pprint
         curr_time = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0,
                 microsecond=0)
+        logger.info("Beginning simulation, press Ctrl+C to exit at any time")
         try:
             while True:
                 dow = curr_time.weekday()
-                logger.info(f"simulation running.. {curr_time.isoformat()}, hour: {curr_time.hour}")
-                #pprint.pprint(self.blue_line)
+                logger.debug(f"simulation running.. {curr_time.isoformat()}, hour: {curr_time.hour}")
+                logger.debug(self.blue_line)
                 curr_time = curr_time + datetime.timedelta(minutes=3)
                 time.sleep(1)
                 self.blue_line.advance()
