@@ -13,6 +13,7 @@ import pandas as pd
 # Import logging before models to ensure configuration is picked up
 logging.config.fileConfig(f"{Path(__file__).parents[1]}/logging.ini")
 
+from connector import configure_connector
 from models import Line, Weather
 
 
@@ -63,7 +64,10 @@ class TimeSimulation:
         curr_time = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0,
                 microsecond=0)
         logger.info("Beginning simulation, press Ctrl+C to exit at any time")
+        logger.info("loading kafka connect jdbc source connector")
+        configure_connector()
 
+        logger.info("beginning cta train simulation")
         weather = Weather(curr_time.month)
         try:
             while True:
