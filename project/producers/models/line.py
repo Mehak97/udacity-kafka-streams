@@ -28,12 +28,12 @@ class Line:
         stations = station_df["STATION_NAME"].unique()
 
         station_data = station_df[station_df["STATION_NAME"] == stations[0]]
-        line = [Station(station_data["MAP_ID"].unique()[0], stations[0], self.color)]
+        line = [Station(station_data["STATION_ID"].unique()[0], stations[0], self.color)]
         prev_station = line[0]
         for station in stations[1:]:
             station_data = station_df[station_df["STATION_NAME"] == station]
             new_station = Station(
-                station_data["MAP_ID"].unique()[0], station, self.color, prev_station
+                station_data["STATION_ID"].unique()[0], station, self.color, prev_station
             )
             prev_station.dir_b = new_station
             prev_station = new_station

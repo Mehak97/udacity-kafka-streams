@@ -12,7 +12,8 @@ import tornado.web
 logging.config.fileConfig(f"{Path(__file__).parents[1]}/logging.ini")
 
 
-from . import Consumer
+from consumer import Consumer
+from models import Line, Weather
 
 
 logger = logging.getLogger(__name__)
@@ -33,17 +34,32 @@ class MainHandler(tornado.web.RequestHandler):
 
 def run_server():
     """Runs the Tornado Server and begins Kafka consumption"""
+    weather_model = Weather()
+    lines = {
+        "blue":  Line("blue")
+    }
+
     application = tornado.web.Application([(r"/", MainHandler)])
     application.listen(8888)
-    c = Consumer("org.chicago.cta.weather.v1")
+
+    # Build kafka consumers
+    consumers = [
+        Consumer("org.chicago.cta.weather.v1", weather_model.process_message),
+        Consumer("^org.chicago.cta.blue.station.*", lines["blue"].process_message),
+        Consumer("org.chicago.cta.stations", lines["blue"].process_message, offset_earliest=True)
+    ]
+
     try:
         logger.info("listening on :8888")
-        tornado.ioloop.IOLoop.current().spawn_callback(c.consume)
+        for consumer in consumers:
+            tornado.ioloop.IOLoop.current().spawn_callback(consumer.consume)
+
         tornado.ioloop.IOLoop.current().start()
     except KeyboardInterrupt as e:
         logger.info("shutting down server")
         tornado.ioloop.IOLoop.current().stop()
-        c.close()
+        for consumer in consumers:
+            consumer.close()
 
 
 

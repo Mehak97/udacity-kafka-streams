@@ -15,7 +15,12 @@ def configure_connector():
     """Starts and configures the Kafka Connect connector"""
     logging.debug("creating or updating kafka connect connector...")
 
-    resp = requests.post(
+    rest_method = requests.post
+    resp = requests.get(f"{KAFKA_CONNECT_URL}/{CONNECTOR_NAME}")
+    if resp.status_code == 200:
+        return
+
+    resp = rest_method(
         KAFKA_CONNECT_URL,
         headers={"Content-Type": "application/json"},
         data=json.dumps({
@@ -26,10 +31,15 @@ def configure_connector():
                 "key.converter.schema.registry.url": "http://schema-registry:8081",
                 "value.converter": "io.confluent.connect.avro.AvroConverter",
                 "value.converter.schema.registry.url": "http://schema-registry:8081",
-                "connection.url": "jdbc:postgresql://postgres:5432/cta?user=cta_admin&password=chicago",
+                "connection.url": "jdbc:postgresql://postgres:5432/cta",
+                "connection.user": "cta_admin",
+                "connection.password": "chicago",
                 "table.whitelist": "stations",
-                "mode": "bulk",
+                "mode": "incrementing",
+                "incrementing.column.name": "stop_id",
                 "topic.prefix": "org.chicago.cta.",
+                "poll.interval.ms": "3600000",
+                "batch.max.rows": "500",
             }
         }),
     )
@@ -37,3 +47,7 @@ def configure_connector():
     # Ensure a healthy response was given
     resp.raise_for_status()
     logging.debug("connector created successfully")
+
+
+if __name__ == "__main__":
+    configure_connector()
