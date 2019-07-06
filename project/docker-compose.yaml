@@ -143,3 +143,15 @@ services:
       SCHEMAREGISTRY_URL: "http://schema-registry:8081/"
     depends_on:
     - "schema-registry"
+
+  postgres:
+    image: postgres:11
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_USER: "cta_admin"
+      POSTGRES_PASSWORD: "chicago"
+      POSTGRES_DB: "cta"
+    volumes:
+    - ./producers/data/cta_stations.csv:/tmp/cta_stations.csv
+    - ./load_stations.sql:/docker-entrypoint-initdb.d/load_stations.sql

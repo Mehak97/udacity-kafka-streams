@@ -17,7 +17,9 @@ logger = logging.getLogger(__name__)
 class Weather(Producer):
     """Defines a simulated weather model"""
 
-    status = IntEnum("status", "sunny partly_cloudy cloudy windy precipitation", start=0)
+    status = IntEnum(
+        "status", "sunny partly_cloudy cloudy windy precipitation", start=0
+    )
 
     rest_proxy_url = "http://localhost:8082"
 
@@ -29,11 +31,11 @@ class Weather(Producer):
 
     def __init__(self, month):
         super().__init__(
-                "org.chicago.cta.weather.v1",
-                key_schema=Weather.key_schema,
-                value_schema=Weather.value_schema,
-                num_partitions=1,
-                num_replicas=2,
+            "org.chicago.cta.weather.v1",
+            key_schema=Weather.key_schema,
+            value_schema=Weather.value_schema,
+            num_partitions=1,
+            num_replicas=2,
         )
         self.temp = 70.0
         if month in Weather.winter_months:
@@ -61,24 +63,26 @@ class Weather(Producer):
         resp = requests.post(
             f"{Weather.rest_proxy_url}/topics/{urllib.parse.quote_plus(self.topic_name)}",
             headers={"Content-Type": "application/vnd.kafka.avro.v2+json"},
-            data=json.dumps({
-                "key_schema": json.dumps(Weather.key_schema),
-                "value_schema": json.dumps(Weather.value_schema),
-                "records": [{
-                    "key": {
-                        "timestamp": self.time_millis(),
-                    },
-                    "value": {
-                        "temperature": self.temp,
-                        "status": curr_status.name,
-                    }
-                }]
-            })
+            data=json.dumps(
+                {
+                    "key_schema": json.dumps(Weather.key_schema),
+                    "value_schema": json.dumps(Weather.value_schema),
+                    "records": [
+                        {
+                            "key": {"timestamp": self.time_millis()},
+                            "value": {
+                                "temperature": self.temp,
+                                "status": curr_status.name,
+                            },
+                        }
+                    ],
+                }
+            ),
         )
         resp.raise_for_status()
 
         logger.debug(
-                "sent weather data to kafka, temp: %s, status: %s",
-                self.temp,
-                curr_status.name,
+            "sent weather data to kafka, temp: %s, status: %s",
+            self.temp,
+            curr_status.name,
         )

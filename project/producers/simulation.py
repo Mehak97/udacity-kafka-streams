@@ -11,7 +11,7 @@ from pathlib import Path
 import pandas as pd
 
 # Import logging before models to ensure configuration is picked up
-logging.config.fileConfig(f"{Path(__file__).parents[0]}/logging.ini")
+logging.config.fileConfig(f"{Path(__file__).parents[1]}/logging.ini")
 
 from models import Line, Weather
 
@@ -32,7 +32,7 @@ class TimeSimulation:
 
         # Read data from disk
         self.raw_df = pd.read_csv(
-            f"{os.path.dirname(os.path.abspath(__file__))}/data/cta_stations.csv"
+            f"{Path(__file__).parents[0]}/data/cta_stations.csv"
         ).sort_values("MAP_ID")
 
         # Define the train schedule (same for all trains)

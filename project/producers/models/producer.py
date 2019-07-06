@@ -7,7 +7,6 @@ from confluent_kafka import avro
 from confluent_kafka.admin import AdminClient, NewTopic
 from confluent_kafka.avro import AvroProducer
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -15,8 +14,13 @@ class Producer:
     """Defines and provides common functionality amongst Producers"""
 
     def __init__(
-        self, topic_name, key_schema, value_schema, num_partitions=1, num_replicas=1,
-        broker_properties=None
+        self,
+        topic_name,
+        key_schema,
+        value_schema,
+        num_partitions=1,
+        num_replicas=1,
+        broker_properties=None,
     ):
         """Initializes a Producer object with basic settings"""
         self.topic_name = topic_name
@@ -50,7 +54,9 @@ class Producer:
             {"bootstrap.servers": self.broker_properties["bootstrap.servers"]}
         )
         topic_metadata = client.list_topics(timeout=5)
-        if self.topic_name in set(t.topic for t in iter(topic_metadata.topics.values())):
+        if self.topic_name in set(
+            t.topic for t in iter(topic_metadata.topics.values())
+        ):
             logger.info("not recreating existing topic %s", self.topic_name)
             return
         logger.info("creating topic %s", self.topic_name)
