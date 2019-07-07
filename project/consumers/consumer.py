@@ -40,7 +40,7 @@ class Consumer:
                 "schema.registry.url": "http://localhost:8081",
                 "group.id": f"{topic_name_pattern}",
                 "default.topic.config": {
-                    "auto.offset.reset": "smallest"
+                    "auto.offset.reset": "earliest"
                 }
             }
         self.offset_earliest = offset_earliest
