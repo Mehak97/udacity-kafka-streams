@@ -53,9 +53,9 @@ class Line:
             trains.append(train)
 
             if b_dir:
-                self.stations[curr_loc].arrive_b(train)
+                self.stations[curr_loc].arrive_b(train, None, None)
             else:
-                self.stations[curr_loc].arrive_a(train)
+                self.stations[curr_loc].arrive_a(train, None, None)
             curr_loc, b_dir = self._get_next_idx(curr_loc, b_dir)
 
         return trains

@@ -55,19 +55,17 @@ class Station(Producer):
     def __repr__(self):
         return str(self)
 
-    def arrive_a(self, train):
+    def arrive_a(self, train, prev_station_id, prev_direction):
         """Denotes a train arrival at this station in the 'a' direction"""
         self.a_train = train
-        # TODO: Use real name here
-        self.run(train, "a")
+        self.run(train, "a", prev_station_id, prev_direction)
 
-    def arrive_b(self, train):
+    def arrive_b(self, train, prev_station_id, prev_direction):
         """Denotes a train arrival at this station in the 'b' direction"""
         self.b_train = train
-        # TODO: Use real name here
-        self.run(train, "b")
+        self.run(train, "b", prev_station_id, prev_direction)
 
-    def run(self, train, direction):
+    def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""
         try:
             self.producer.produce(
@@ -79,6 +77,8 @@ class Station(Producer):
                     "direction": direction,
                     "line": self.color.name,
                     "train_status": train.status.name,
+                    "prev_station_id": prev_station_id,
+                    "prev_direction": prev_direction,
                 },
             )
         except Exception as e:

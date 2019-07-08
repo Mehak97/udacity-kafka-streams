@@ -21,15 +21,18 @@ logger = logging.getLogger(__name__)
 
 class MainHandler(tornado.web.RequestHandler):
     """Defines a web request handler class"""
-
     template_dir = tornado.template.Loader(f"{Path(__file__).parents[0]}/templates")
-    template = template_dir.load("status.html")
+
+    def initialize(self, weather, lines):
+        """Initializes the handler with required configuration"""
+        self.weather = weather
+        self.lines = lines
 
     def get(self):
         """Responds to get requests"""
         logging.debug("rendering and writing handler template")
-        # TODO: Add values
-        self.write(MainHandler.template.generate())
+        template = MainHandler.template_dir.load("status.html")
+        self.write(template.generate(weather=self.weather, lines=self.lines))
 
 
 def run_server():
@@ -39,7 +42,7 @@ def run_server():
         "blue":  Line("blue")
     }
 
-    application = tornado.web.Application([(r"/", MainHandler)])
+    application = tornado.web.Application([(r"/", MainHandler, {"weather": weather_model, "lines": lines})])
     application.listen(8888)
 
     # Build kafka consumers

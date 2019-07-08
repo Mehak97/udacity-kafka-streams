@@ -57,7 +57,7 @@ class Weather(Producer):
             mode = -1.0
         elif month in Weather.summer_months:
             mode = 1.0
-        self.temp += min(max(-20.0, random.triangular(-10.0, 10.0, mode)), 105.0)
+        self.temp += min(max(-20.0, random.triangular(-10.0, 10.0, mode)), 100.0)
         curr_status = random.choice(list(Weather.status))
 
         resp = requests.post(

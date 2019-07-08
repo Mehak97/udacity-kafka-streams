@@ -12,6 +12,9 @@ class Station:
         """Creates a Station Model"""
         self.station_id = station_id
         self.station_name = station_name
+        self.dir_a = None
+        self.dir_b = None
+        self.num_turnstile_entries = 0
 
     @classmethod
     def from_message(cls, message):
@@ -19,6 +22,33 @@ class Station:
         value = message.value()
         return Station(value["station_id"], value["stop_name"])
 
+    def _handle_arrival(self, direction, train_id, train_status):
+        """Unpacks arrival data"""
+        status_dict = {
+            "train_id": train_id,
+            "status": train_status.replace("_", " "),
+        }
+        if direction == "a":
+            self.dir_a = status_dict
+        else:
+            self.dir_b = status_dict
+
+    def _handle_turnstile(self):
+        """Handles turnstile messages"""
+        self.num_turnstile_entries += 1
+
     def process_message(self, message):
         """Handles arrival and turnstile messages"""
-        logger.debug("processing station message from topic %s", message.topic())
+        try:
+            logger.debug("processing station message from topic %s", message.topic())
+            value = message.value()
+            if "arrival" in message.topic():
+                logger.debug("handling arrival message for station")
+                self._handle_arrival(value["direction"], value["train_id"], value["train_status"])
+            elif "turnstile" in message.topic():
+                logger.debug("handling turnstile message for station")
+                self._handle_turnstile()
+            else:
+                logger.debug("unknown message for station from topic %s", message.topic())
+        except Exception as e:
+            logger.fatal("encountered an exception in station! %s", e)
