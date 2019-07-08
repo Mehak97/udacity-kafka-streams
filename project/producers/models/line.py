@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class Line:
     """Contains Chicago Transit Authority (CTA) Elevated Loop Train ("L") Station Data"""
 
-    colors = IntEnum("colors", "blue", start=0)
+    colors = IntEnum("colors", "blue brown red orange", start=0)
     num_directions = 2
 
     def __init__(self, color, station_data, num_trains=10):
@@ -75,9 +75,6 @@ class Line:
 
     def _advance_trains(self):
         """Advances trains between stations in the simulation"""
-        # TODO:
-        # TODO: Simulation needs to emulate slowdowns/failure
-        # TODO:
         # Find the first b train
         curr_train, curr_index, b_direction = self._next_train()
         self.stations[curr_index].b_train = None
@@ -90,14 +87,17 @@ class Line:
             else:
                 self.stations[curr_index].a_train = None
 
+            prev_station = self.stations[curr_index].station_id
+            prev_dir = "b" if b_direction else "a"
+
             # Advance this train to the next station
             curr_index, b_direction = self._get_next_idx(
                 curr_index, b_direction, step_size=1
             )
             if b_direction is True:
-                self.stations[curr_index].arrive_b(curr_train)
+                self.stations[curr_index].arrive_b(curr_train, prev_station, prev_dir)
             else:
-                self.stations[curr_index].arrive_a(curr_train)
+                self.stations[curr_index].arrive_a(curr_train, prev_station, prev_dir)
 
             # Find the next train to advance
             move = 1 if b_direction else -1
@@ -119,13 +119,15 @@ class Line:
             self.stations[curr_index].a_train = None
 
         # Advance last train to the next station
+        prev_station = self.stations[curr_index].station_id
+        prev_dir = "b" if b_direction else "a"
         curr_index, b_direction = self._get_next_idx(
             curr_index, b_direction, step_size=1
         )
         if b_direction is True:
-            self.stations[curr_index].arrive_b(curr_train)
+            self.stations[curr_index].arrive_b(curr_train, prev_station, prev_dir)
         else:
-            self.stations[curr_index].arrive_a(curr_train)
+            self.stations[curr_index].arrive_a(curr_train, prev_station, prev_dir)
 
     def _next_train(self, start_index=0, b_direction=True, step_size=1):
         """Given a starting index, finds the next train in either direction"""

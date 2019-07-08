@@ -2,7 +2,7 @@
   <head>
     <title>CTA Status</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <meta http-equiv="refresh" content="2.5">
+    <meta http-equiv="refresh" content="10">
   </head>
   <body>
     <div class="container-fluid">
@@ -11,7 +11,7 @@
           <b>Welcome to the CTA Status Page!</b>
         </div>
         <div>
-          {{ int(weather.temperature) }}° | {{ weather.status.title() }}
+          {{ int(weather.temperature) }}° | {{ weather.status.title().replace("_", " ") }}
         </div>
       </div>
       <div class="row" style="margin: 0px 20px 0px 20px">
@@ -26,13 +26,13 @@
             </tr>
           </thead>
           <tbody>
-            {% for color, line in lines.items() %}
+            {% for color, line in (("blue", lines.blue_line), ("brown", lines.brown_line), ("red", lines.red_line), ("orange", lines.orange_line)) %}
             {% for station_id, station in line.stations.items() %}
             <tr>
-              <td>{{ color }}</td>
+              <td style="background-color: {{ line.color_code }}">    </td>
               <td>{{ station.station_name }}</td>
-              <td>{{ station.dir_a if station.dir_a is not None else "---" }}</td>
-              <td>{{ station.dir_b if station.dir_b is not None else "---" }}</td>
+              <td>{{ station.dir_a["train_id"] if station.dir_a is not None else "---" }}</td>
+              <td>{{ station.dir_b["train_id"] if station.dir_b is not None else "---" }}</td>
               <td>{{ station.num_turnstile_entries }}</td>
             </tr>
             {% end %}

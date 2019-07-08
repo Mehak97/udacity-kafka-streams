@@ -19,4 +19,6 @@ class Weather:
         value = message.value()
         self.temperature = value["temperature"]
         self.status = value["status"]
-        logger.debug("weather is now %sf and %s", self.temperature, self.status.replace("_", " "))
+        logger.debug(
+            "weather is now %sf and %s", self.temperature, self.status.replace("_", " ")
+        )

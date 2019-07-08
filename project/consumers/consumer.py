@@ -52,10 +52,10 @@ class Consumer:
         """Callback for when topic assignment takes place"""
         for partition in partitions:
             if self.offset_earliest is True:
-                logger.info("setting partitions to earliest for %s", self.topic_name_pattern)
-                logger.info("before: %s", partition)
+                logger.debug("setting partitions to earliest for %s", self.topic_name_pattern)
+                logger.debug("before: %s", partition)
                 partition.offset = confluent_kafka.OFFSET_BEGINNING
-                logger.info("after: %s", partition)
+                logger.debug("after: %s", partition)
         logger.info("partitions assigned for %s", self.topic_name_pattern)
         consumer.assign(partitions)
 

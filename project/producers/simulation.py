@@ -24,12 +24,12 @@ class TimeSimulation:
     weekdays = IntEnum('weekdays', 'mon tue wed thu fri sat sun', start=0)
     ten_min_frequency = datetime.timedelta(minutes=10)
 
-    def __init__(self, sleep_seconds=0.5, time_step=None, schedule=None):
+    def __init__(self, sleep_seconds=5, time_step=None, schedule=None):
         """Initializes the time simulation"""
         self.sleep_seconds = sleep_seconds
         self.time_step = time_step
         if self.time_step is None:
-            self.time_step = datetime.timedelta(minutes=1)
+            self.time_step = datetime.timedelta(minutes=self.sleep_seconds)
 
         # Read data from disk
         self.raw_df = pd.read_csv(
@@ -51,14 +51,10 @@ class TimeSimulation:
 
         self.train_lines = [
             Line(Line.colors.blue, self.raw_df[self.raw_df["BLUE"]]),
+            Line(Line.colors.brown, self.raw_df[self.raw_df["BRN"]]),
+            Line(Line.colors.red, self.raw_df[self.raw_df["RED"]]),
+            Line(Line.colors.orange, self.raw_df[self.raw_df["O"]]),
         ]
-        #self._build_line_data(self.raw_df[self.raw_df["RED"]])
-        #self.brown_line = self._build_line_data(self.raw_df[self.raw_df["BRN"]])
-        #self.green_line = self._build_line_data(self.raw_df[self.raw_df["G"]])
-        #self.purple_line = self._build_line_data(self.raw_df[self.raw_df["P"]])
-        #self.yellow_line = self._build_line_data(self.raw_df[self.raw_df["Y"]])
-        #self.pink_line = self._build_line_data(self.raw_df[self.raw_df["Pnk"]])
-        #self.orange_line = self._build_line_data(self.raw_df[self.raw_df["O"]])
 
     def run(self):
         curr_time = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0,

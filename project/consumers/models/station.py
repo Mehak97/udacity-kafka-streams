@@ -20,14 +20,18 @@ class Station:
     def from_message(cls, message):
         """Given a Kafka Station message, creates and returns a station"""
         value = message.value()
-        return Station(value["station_id"], value["stop_name"])
+        return Station(value["station_id"], value["station_name"])
 
-    def _handle_arrival(self, direction, train_id, train_status):
+    def handle_departure(self, direction):
+        """Removes a train from the station"""
+        if direction == "a":
+            self.dir_a = None
+        else:
+            self.dir_b = None
+
+    def handle_arrival(self, direction, train_id, train_status):
         """Unpacks arrival data"""
-        status_dict = {
-            "train_id": train_id,
-            "status": train_status.replace("_", " "),
-        }
+        status_dict = {"train_id": train_id, "status": train_status.replace("_", " ")}
         if direction == "a":
             self.dir_a = status_dict
         else:
@@ -42,13 +46,8 @@ class Station:
         try:
             logger.debug("processing station message from topic %s", message.topic())
             value = message.value()
-            if "arrival" in message.topic():
-                logger.debug("handling arrival message for station")
-                self._handle_arrival(value["direction"], value["train_id"], value["train_status"])
-            elif "turnstile" in message.topic():
+            if "turnstile" in message.topic():
                 logger.debug("handling turnstile message for station")
                 self._handle_turnstile()
-            else:
-                logger.debug("unknown message for station from topic %s", message.topic())
         except Exception as e:
             logger.fatal("encountered an exception in station! %s", e)

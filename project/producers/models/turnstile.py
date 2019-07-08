@@ -30,7 +30,7 @@ class Turnstile(Producer):
             f"org.chicago.cta.{station.color.name}.station.{st_name}.turnstile.v1",
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema,
-            num_partitions=25,
+            num_partitions=5,
             num_replicas=2,
         )
         self.station = station

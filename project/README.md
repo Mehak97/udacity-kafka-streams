@@ -2,10 +2,9 @@
 
 In this project, you will construct a streaming event pipeline around Apache Kafka and its ecosystem. Using public data from the [Chicago Transit Authority](https://www.transitchicago.com/data/) we will construct an event pipeline around Kafka that allows us to simulate and display the status of train lines in real time.
 
+When the project is complete, you will be able to monitor a website to watch trains move from station to station.
 
-
-# TODO: Insert image of final UI here.
-
+![Final User Interface](images/ui.png)
 
 
 ## Prerequisites
@@ -19,6 +18,10 @@ The following are required to complete this project:
 ## Description
 
 The Chicago Transit Authority (CTA) has asked us to develop a dashboard displaying system status for its commuters. We have decided to use Kafka and ecosystem tools like REST Proxy and Kafka Connect to accomplish this task.
+
+Our architecture will look like so:
+
+![Project Architecture](images/diagram.png)
 
 ### Step 1: Create Kafka Producers
 The first step in our plan is to configure the train stations to emit some of the events that we need. The CTA has placed a sensor on each side of every train station that can be programmed to take an action whenever a train arrives at the station.
@@ -139,6 +142,7 @@ Once docker-compose is ready, the following services will be available:
 
 | Service | Host URL | Docker URL | Username | Password |
 | --- | --- | --- | --- | --- |
+| Public Transit Status | [http://localhost:8888](http://localhost:8888) | n/a | ||
 | Landoop Kafka Connect UI | [http://localhost:8084](http://localhost:8084) | http://connect-ui:8084 |
 | Landoop Kafka Topics UI | [http://localhost:8085](http://localhost:8085) | http://topics-ui:8085 |
 | Landoop Schema Registry UI | [http://localhost:8086](http://localhost:8086) | http://schema-registry-ui:8086 |
