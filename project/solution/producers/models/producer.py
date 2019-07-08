@@ -20,7 +20,6 @@ class Producer:
         value_schema,
         num_partitions=1,
         num_replicas=1,
-        broker_properties=None,
     ):
         """Initializes a Producer object with basic settings"""
         self.topic_name = topic_name
@@ -28,19 +27,21 @@ class Producer:
         self.value_schema = value_schema
         self.num_partitions = num_partitions
         self.num_replicas = num_replicas
-        self.broker_properties = broker_properties
-        if self.broker_properties is None:
-            self.broker_properties = {
-                "bootstrap.servers": ",".join(
-                    [
-                        "PLAINTEXT://localhost:9092",
-                        "PLAINTEXT://localhost:9093",
-                        "PLAINTEXT://localhost:9094",
-                    ]
-                ),
-                "schema.registry.url": "http://localhost:8081",
-            }
+
+        # TODO: Configure the broker properties below. Make sure to reference the project README
+        # and use the Host URL for Kafka and Schema Registry!
+        self.broker_properties = {
+            "bootstrap.servers": ",".join(
+                [
+                    "PLAINTEXT://localhost:9092",
+                    "PLAINTEXT://localhost:9093",
+                    "PLAINTEXT://localhost:9094",
+                ]
+            ),
+            "schema.registry.url": "http://localhost:8081",
+        }
         self.create_topic()
+        # TODO: Configure the AvroProducer
         self.producer = AvroProducer(
             self.broker_properties,
             default_key_schema=key_schema,
@@ -49,6 +50,8 @@ class Producer:
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
+        # TODO: Write code that creates the topic for this producer if it does not already exist on
+        # the Kafka Broker.
         logger.info("beginning topic creation for %s", self.topic_name)
         client = AdminClient(
             {"bootstrap.servers": self.broker_properties["bootstrap.servers"]}
@@ -76,6 +79,7 @@ class Producer:
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
+        # TODO: Write cleanup code for the Producer here
         if self.producer is not None:
             logger.debug("flushing producer...")
             self.producer.flush()

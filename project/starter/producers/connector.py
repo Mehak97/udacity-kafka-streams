@@ -36,15 +36,23 @@ def configure_connector():
                 "key.converter.schema.registry.url": "http://schema-registry:8081",
                 "value.converter": "io.confluent.connect.avro.AvroConverter",
                 "value.converter.schema.registry.url": "http://schema-registry:8081",
-                "connection.url": "jdbc:postgresql://postgres:5432/cta",
-                "connection.user": "cta_admin",
-                "connection.password": "chicago",
-                "table.whitelist": "stations",
-                "mode": "incrementing",
-                "incrementing.column.name": "stop_id",
-                "topic.prefix": "org.chicago.cta.",
-                "poll.interval.ms": "3600000",
                 "batch.max.rows": "500",
+                # TODO
+                "connection.url": "",
+                # TODO
+                "connection.user": "",
+                # TODO
+                "connection.password": "",
+                # TODO
+                "table.whitelist": "",
+                # TODO
+                "mode": "",
+                # TODO
+                "incrementing.column.name": "",
+                # TODO
+                "topic.prefix": "",
+                # TODO
+                "poll.interval.ms": "",
             }
         }),
     )

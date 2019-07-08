@@ -56,12 +56,16 @@ class Line:
 
     def process_message(self, message):
         """Given a kafka message, extract data"""
+        #
+        #
         # TODO: Based on the message topic, call the appropriate handler.
-        if message.topic() == "org.chicago.cta.stations":
+        #
+        #
+        if True: # TODO: Set the conditional correctly
             self._handle_station(message)
-        elif "arrivals" in message.topic():
+        elif True: # TODO: Set the conditional correctly
             self._handle_arrival(message)
-        elif "turnstile" in message.topic():
+        elif True: # TODO: Set the conditional correctly
             station_id = message.value().get("station_id")
             station = self.stations.get(station_id)
             if station is None:

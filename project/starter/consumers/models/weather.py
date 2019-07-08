@@ -15,11 +15,8 @@ class Weather:
 
     def process_message(self, message):
         """Handles incoming weather data"""
+        #
+        #
         # TODO: Process incoming weather messages. Set the temperature and status.
-        logger.debug("handling incoming weather message")
-        value = message.value()
-        self.temperature = value["temperature"]
-        self.status = value["status"]
-        logger.debug(
-            "weather is now %sf and %s", self.temperature, self.status.replace("_", " ")
-        )
+        #
+        #

@@ -43,13 +43,9 @@ class Station:
 
     def process_message(self, message):
         """Handles arrival and turnstile messages"""
+        #
+        #
         # TODO: Check if the message is a turnstile event, and if it is, call
         # `self._handle_turnstile()
-        try:
-            logger.debug("processing station message from topic %s", message.topic())
-            value = message.value()
-            if "turnstile" in message.topic():
-                logger.debug("handling turnstile message for station")
-                self._handle_turnstile()
-        except Exception as e:
-            logger.fatal("encountered an exception in station! %s", e)
+        #
+        #

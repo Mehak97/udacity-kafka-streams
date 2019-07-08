@@ -28,40 +28,40 @@ class Consumer:
         self.consume_timeout = consume_timeout
         self.offset_earliest = offset_earliest
 
+        #
+        #
         # TODO: Configure the broker properties below. Make sure to reference the project README
         # and use the Host URL for Kafka and Schema Registry!
+        #
+        #
         self.broker_properties = {
-            "bootstrap.servers": ",".join(
-                [
-                    "PLAINTEXT://localhost:9092",
-                    "PLAINTEXT://localhost:9093",
-                    "PLAINTEXT://localhost:9094",
-                ]
-            ),
-            "schema.registry.url": "http://localhost:8081",
-            "group.id": f"{topic_name_pattern}",
-            "default.topic.config": {
-                "auto.offset.reset": "earliest"
-            }
+                #
+                # TODO
+                #
         }
+
+        #
+        #
         # TODO: Configure the AvroConsumer and subscribe to the topics. Make sure to think about
         # how the `on_assign` callback should be invoked.
-        self.consumer = AvroConsumer(self.broker_properties)
-        self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
+        #
+        #
+        # self.consumer = AvroConsumer( TODO )
+        # self.consumer.subscribe( TODO )
 
     def on_assign(self, consumer, partitions):
         """Callback for when topic assignment takes place"""
         # TODO: If the topic is configured to use `offset_earliest` set the partition offset to
         # the beginning or earliest
         for partition in partitions:
-            if self.offset_earliest is True:
-                logger.debug("setting partitions to earliest for %s", self.topic_name_pattern)
-                logger.debug("before: %s", partition)
-                partition.offset = confluent_kafka.OFFSET_BEGINNING
-                logger.debug("after: %s", partition)
-        logger.info("partitions assigned for %s", self.topic_name_pattern)
+            pass
+            #
+            #
+            # TODO
+            #
+            #
 
-        # TODO: Assign the consumer the partitions
+        logger.info("partitions assigned for %s", self.topic_name_pattern)
         consumer.assign(partitions)
 
     async def consume(self):
@@ -74,35 +74,20 @@ class Consumer:
 
     def _consume(self):
         """Polls for a message. Returns 1 if a message was received, 0 otherwise"""
+        #
+        #
         # TODO: Poll Kafka for messages. Make sure to handle any errors or exceptions.
-        logger.debug("consuming from topic pattern %s", self.topic_name_pattern)
-        try:
-            message = self.consumer.poll(timeout=self.consume_timeout)
-        except SerializerError as e:
-            logger.error(
-                "failed to deserialize message %s: %s", self.topic_name_pattern, e
-            )
-
-        if message is None:
-            logger.debug("no messages to be consumed")
-            return 0
-        elif message.error() is not None:
-            logger.error(
-                "failed to consume message %s: %s",
-                self.topic_name_pattern,
-                message.error(),
-            )
-            return 0
-
-        logger.debug(
-            "message received: (%s) %s", message.key(), message.value()
-        )
-        self.message_handler(message)
-        return 1
+        # Additionally, make sure you return 1 when a message is processed, and 0 when no message
+        # is retrieved.
+        #
+        #
+        return 0
 
 
     def close(self):
         """Cleans up any open kafka consumers"""
+        #
+        #
         # TODO: Cleanup the kafka consumer
-        logger.debug("closing consumer...")
-        self.consumer.close()
+        #
+        #
