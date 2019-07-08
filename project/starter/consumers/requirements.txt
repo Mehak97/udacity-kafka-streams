@@ -1,0 +1,2 @@
+confluent-kafka[avro]==1.0.1
+tornado==6.0.3
