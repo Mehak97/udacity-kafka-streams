@@ -59,6 +59,7 @@ class Line:
         # TODO: Based on the message topic, call the appropriate handler.
         #
         #
+        logger.info("line process_message is incomplete - skipping")
         if True: # TODO: Set the conditional correctly
             self._handle_station(message)
         elif True: # TODO: Set the conditional correctly

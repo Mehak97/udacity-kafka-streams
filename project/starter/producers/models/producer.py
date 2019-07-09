@@ -16,8 +16,8 @@ class Producer:
     def __init__(
         self,
         topic_name,
-        key_schema,
-        value_schema,
+        key_schema=None,
+        value_schema=None,
         num_partitions=1,
         num_replicas=1,
     ):
@@ -52,6 +52,7 @@ class Producer:
         # the Kafka Broker.
         #
         #
+        logger.info("topic creation kafka integration incomplete - skipping")
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""
@@ -60,6 +61,7 @@ class Producer:
         # TODO: Write cleanup code for the Producer here
         #
         #
+        logger.info("producer close incomplete - skipping")
 
     def time_millis(self):
         """Use this function to get the key for Kafka Events"""

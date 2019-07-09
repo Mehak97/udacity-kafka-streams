@@ -44,6 +44,7 @@ class Station:
 
     def process_message(self, message):
         """Handles arrival and turnstile messages"""
+        logger.info("station process_message is incomplete - skipping")
         #
         #
         # TODO: Check if the message is a turnstile event, and if it is, call
