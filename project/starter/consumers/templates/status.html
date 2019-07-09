@@ -27,7 +27,7 @@
           </thead>
           <tbody>
             {% for color, line in (("blue", lines.blue_line), ("green", lines.green_line), ("red", lines.red_line)) %}
-            {% for station_id, station in line.stations.items() %}
+            {% for station in sorted(line.stations.values(), key=lambda x: x.order) %}
             <tr>
               <td style="background-color: {{ line.color_code }}">    </td>
               <td>{{ station.station_name }}</td>
