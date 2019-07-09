@@ -16,12 +16,10 @@ class Line:
         self.color_code = "0xFFFFFF"
         if self.color == "blue":
             self.color_code = "#1E90FF"
-        elif self.color == "orange":
-            self.color_code = "#FF8C00"
         elif self.color == "red":
             self.color_code = "#DC143C"
-        elif self.color == "brown":
-            self.color_code = "#A0522D"
+        elif self.color == "green":
+            self.color_code = "#32CD32"
         self.stations = {}
 
     def _handle_station(self, message):

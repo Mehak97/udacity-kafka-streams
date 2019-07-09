@@ -48,9 +48,8 @@ def run_server():
         Consumer("org.chicago.cta.weather.v1", weather_model.process_message),
         Consumer("org.chicago.cta.stations", lines.process_message, offset_earliest=True),
         Consumer("^org.chicago.cta.blue.station.*", lines.blue_line.process_message),
-        Consumer("^org.chicago.cta.orange.station.*", lines.orange_line.process_message),
         Consumer("^org.chicago.cta.red.station.*", lines.red_line.process_message),
-        Consumer("^org.chicago.cta.brown.station.*", lines.brown_line.process_message),
+        Consumer("^org.chicago.cta.green.station.*", lines.green_line.process_message),
     ]
 
     try:

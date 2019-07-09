@@ -51,9 +51,8 @@ class TimeSimulation:
 
         self.train_lines = [
             Line(Line.colors.blue, self.raw_df[self.raw_df["BLUE"]]),
-            Line(Line.colors.brown, self.raw_df[self.raw_df["BRN"]]),
             Line(Line.colors.red, self.raw_df[self.raw_df["RED"]]),
-            Line(Line.colors.orange, self.raw_df[self.raw_df["O"]], num_trains=4),
+            Line(Line.colors.green, self.raw_df[self.raw_df["G"]]),
         ]
 
     def run(self):

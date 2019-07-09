@@ -12,9 +12,8 @@ class Lines:
 
     def __init__(self):
         """Creates the Lines object"""
-        self.brown_line = Line("brown")
         self.red_line = Line("red")
-        self.orange_line = Line("orange")
+        self.green_line = Line("green")
         self.blue_line = Line("blue")
 
     def process_message(self, message):
@@ -23,11 +22,9 @@ class Lines:
             logger.debug("ignoring non-lines message")
 
         value = message.value()
-        if value["brown"] is True:
-            self.brown_line.process_message(message)
+        if value["green"] is True:
+            self.green_line.process_message(message)
         if value["red"] is True:
             self.red_line.process_message(message)
-        if value["orange"] is True:
-            self.orange_line.process_message(message)
         if value["blue"] is True:
             self.blue_line.process_message(message)

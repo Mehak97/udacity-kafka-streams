@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class Line:
     """Contains Chicago Transit Authority (CTA) Elevated Loop Train ("L") Station Data"""
 
-    colors = IntEnum("colors", "blue brown red orange", start=0)
+    colors = IntEnum("colors", "blue green red", start=0)
     num_directions = 2
 
     def __init__(self, color, station_data, num_trains=10):

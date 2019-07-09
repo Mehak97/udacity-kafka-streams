@@ -34,7 +34,7 @@ class TimeSimulation:
         # Read data from disk
         self.raw_df = pd.read_csv(
             f"{Path(__file__).parents[0]}/data/cta_stations.csv"
-        ).sort_values("STATION_ID")
+        ).sort_values("ORDER")
 
         # Define the train schedule (same for all trains)
         self.schedule = schedule
@@ -51,9 +51,8 @@ class TimeSimulation:
 
         self.train_lines = [
             Line(Line.colors.blue, self.raw_df[self.raw_df["BLUE"]]),
-            Line(Line.colors.brown, self.raw_df[self.raw_df["BRN"]]),
             Line(Line.colors.red, self.raw_df[self.raw_df["RED"]]),
-            Line(Line.colors.orange, self.raw_df[self.raw_df["O"]], num_trains=4),
+            Line(Line.colors.green, self.raw_df[self.raw_df["G"]]),
         ]
 
     def run(self):
