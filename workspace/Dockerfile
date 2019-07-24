@@ -11,7 +11,7 @@ RUN apt-get update
 RUN apt-get install salt-master salt-minion python-pygit2 -y
 
 RUN echo "file_client: local" >> /etc/salt/minion
-RUN cat /etc/salt/master >> /etc/salt/minion
+#RUN cat /etc/salt/master >> /etc/salt/minion
 
 RUN echo '\n\
 fileserver_backend: \n\
@@ -19,6 +19,7 @@ fileserver_backend: \n\
   - roots\n\
 \n\
 gitfs_remotes:\n\
+  - https://github.com/saltstack-formulas/node-formula.git\n\
   - https://github.com/saltstack-formulas/zookeeper-formula\n\
   - https://github.com/benjigoldberg/kafka-formula' >> /etc/salt/minion
 
