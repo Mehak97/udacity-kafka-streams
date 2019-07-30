@@ -13,10 +13,13 @@ logger = logging.getLogger(__name__)
 class Producer:
     """Defines and provides common functionality amongst Producers"""
 
+    # Tracks existing topics across all Producer instances
+    existing_topics = set([])
+
     def __init__(
         self,
         topic_name,
-        key_schema=None,
+        key_schema,
         value_schema=None,
         num_partitions=1,
         num_replicas=1,
@@ -35,14 +38,19 @@ class Producer:
         #
         #
         self.broker_properties = {
-                # TODO
-                # TODO
-                # TODO
+            # TODO
+            # TODO
+            # TODO
         }
-        self.create_topic()
+
+        # If the topic does not already exist, try to create it
+        if self.topic_name not in Producer.existing_topics:
+            self.create_topic()
+            Producer.existing_topics.add(self.topic_name)
+
         # TODO: Configure the AvroProducer
-        #self.producer = AvroProducer(
-        #)
+        # self.producer = AvroProducer(
+        # )
 
     def create_topic(self):
         """Creates the producer topic if it does not already exist"""
@@ -53,6 +61,9 @@ class Producer:
         #
         #
         logger.info("topic creation kafka integration incomplete - skipping")
+
+    def time_millis(self):
+        return int(round(time.time() * 1000))
 
     def close(self):
         """Prepares the producer for exit by cleaning up the producer"""

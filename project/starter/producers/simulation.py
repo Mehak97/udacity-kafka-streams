@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class TimeSimulation:
-    weekdays = IntEnum('weekdays', 'mon tue wed thu fri sat sun', start=0)
+    weekdays = IntEnum("weekdays", "mon tue wed thu fri sat sun", start=0)
     ten_min_frequency = datetime.timedelta(minutes=10)
 
     def __init__(self, sleep_seconds=5, time_step=None, schedule=None):
@@ -34,7 +34,7 @@ class TimeSimulation:
         # Read data from disk
         self.raw_df = pd.read_csv(
             f"{Path(__file__).parents[0]}/data/cta_stations.csv"
-        ).sort_values("STATION_ID")
+        ).sort_values("order")
 
         # Define the train schedule (same for all trains)
         self.schedule = schedule
@@ -46,18 +46,19 @@ class TimeSimulation:
                 TimeSimulation.weekdays.thu: {0: TimeSimulation.ten_min_frequency},
                 TimeSimulation.weekdays.fri: {0: TimeSimulation.ten_min_frequency},
                 TimeSimulation.weekdays.sat: {0: TimeSimulation.ten_min_frequency},
-                TimeSimulation.weekdays.sun: {0: TimeSimulation.ten_min_frequency}
+                TimeSimulation.weekdays.sun: {0: TimeSimulation.ten_min_frequency},
             }
 
         self.train_lines = [
-            Line(Line.colors.blue, self.raw_df[self.raw_df["BLUE"]]),
-            Line(Line.colors.red, self.raw_df[self.raw_df["RED"]]),
-            Line(Line.colors.green, self.raw_df[self.raw_df["G"]]),
+            Line(Line.colors.blue, self.raw_df[self.raw_df["blue"]]),
+            Line(Line.colors.red, self.raw_df[self.raw_df["red"]]),
+            Line(Line.colors.green, self.raw_df[self.raw_df["green"]]),
         ]
 
     def run(self):
-        curr_time = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0,
-                microsecond=0)
+        curr_time = datetime.datetime.utcnow().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
         logger.info("Beginning simulation, press Ctrl+C to exit at any time")
         logger.info("loading kafka connect jdbc source connector")
         configure_connector()

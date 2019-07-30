@@ -2,6 +2,7 @@
 import logging
 
 import confluent_kafka
+from confluent_kafka import Consumer
 from confluent_kafka.avro import AvroConsumer
 from confluent_kafka.avro.serializer import SerializerError
 from tornado import gen
@@ -10,13 +11,14 @@ from tornado import gen
 logger = logging.getLogger(__name__)
 
 
-class Consumer:
+class KafkaConsumer:
     """Defines the base kafka consumer class"""
 
     def __init__(
         self,
         topic_name_pattern,
         message_handler,
+        is_avro=True,
         offset_earliest=False,
         sleep_secs=1.0,
         consume_timeout=0.1,
@@ -31,22 +33,21 @@ class Consumer:
         # TODO: Configure the broker properties below. Make sure to reference the project README
         # and use the Host URL for Kafka and Schema Registry!
         self.broker_properties = {
-            "bootstrap.servers": ",".join(
-                [
-                    "PLAINTEXT://localhost:9092",
-                    "PLAINTEXT://localhost:9093",
-                    "PLAINTEXT://localhost:9094",
-                ]
-            ),
-            "schema.registry.url": "http://localhost:8081",
+            "bootstrap.servers": ",".join(["PLAINTEXT://localhost:9092"]),
             "group.id": f"{topic_name_pattern}",
-            "default.topic.config": {
-                "auto.offset.reset": "earliest"
-            }
+            "default.topic.config": {"auto.offset.reset": "earliest"},
         }
-        # TODO: Configure the AvroConsumer and subscribe to the topics. Make sure to think about
+
+        # TODO: Create the Consumer, using the appropriate type.
+        if is_avro is True:
+            # TODO: Make sure to set schema registry
+            self.broker_properties["schema.registry.url"] = "http://localhost:8081"
+            self.consumer = AvroConsumer(self.broker_properties)
+        else:
+            self.consumer = Consumer(self.broker_properties)
+
+        # TODO: Subscribe to the topics. Make sure to think about
         # how the `on_assign` callback should be invoked.
-        self.consumer = AvroConsumer(self.broker_properties)
         self.consumer.subscribe([self.topic_name_pattern], on_assign=self.on_assign)
 
     def on_assign(self, consumer, partitions):
@@ -55,7 +56,9 @@ class Consumer:
         # the beginning or earliest
         for partition in partitions:
             if self.offset_earliest is True:
-                logger.debug("setting partitions to earliest for %s", self.topic_name_pattern)
+                logger.debug(
+                    "setting partitions to earliest for %s", self.topic_name_pattern
+                )
                 logger.debug("before: %s", partition)
                 partition.offset = confluent_kafka.OFFSET_BEGINNING
                 logger.debug("after: %s", partition)
@@ -82,6 +85,7 @@ class Consumer:
             logger.error(
                 "failed to deserialize message %s: %s", self.topic_name_pattern, e
             )
+            return 0
 
         if message is None:
             logger.debug("no messages to be consumed")
@@ -94,12 +98,9 @@ class Consumer:
             )
             return 0
 
-        logger.debug(
-            "message received: (%s) %s", message.key(), message.value()
-        )
+        logger.debug("message received: (%s) %s", message.key(), message.value())
         self.message_handler(message)
         return 1
-
 
     def close(self):
         """Cleans up any open kafka consumers"""

@@ -1,4 +1,5 @@
 """Contains functionality related to Lines"""
+import json
 import logging
 
 from models import Station
@@ -22,12 +23,11 @@ class Line:
             self.color_code = "#32CD32"
         self.stations = {}
 
-    def _handle_station(self, message):
+    def _handle_station(self, value):
         """Adds the station to this Line's data model"""
-        value = message.value()
-        if value[self.color] is not True:
+        if value["line"] != self.color:
             return
-        self.stations[value["station_id"]] = Station.from_message(message)
+        self.stations[value["station_id"]] = Station.from_message(value)
 
     def _handle_arrival(self, message):
         """Updates train locations"""
@@ -41,7 +41,9 @@ class Line:
             else:
                 logger.debug("unable to handle previous station due to missing station")
         else:
-            logger.debug("unable to handle previous station due to missing previous info")
+            logger.debug(
+                "unable to handle previous station due to missing previous info"
+            )
 
         station_id = value.get("station_id")
         station = self.stations.get(station_id)
@@ -55,16 +57,23 @@ class Line:
     def process_message(self, message):
         """Given a kafka message, extract data"""
         # TODO: Based on the message topic, call the appropriate handler.
-        if message.topic() == "org.chicago.cta.stations":
-            self._handle_station(message)
+        if message.topic() == "org.chicago.cta.stations.table.v1":
+            try:
+                value = json.loads(message.value())
+                self._handle_station(value)
+            except Exception as e:
+                logger.fatal("bad station? %s, %s", value, e)
         elif "arrivals" in message.topic():
             self._handle_arrival(message)
-        elif "turnstile" in message.topic():
-            station_id = message.value().get("station_id")
+        elif "TURNSTILE_SUMMARY" in message.topic():
+            json_data = json.loads(message.value())
+            station_id = json_data.get("STATION_ID")
             station = self.stations.get(station_id)
             if station is None:
                 logger.debug("unable to handle message due to missing station")
                 return
-            station.process_message(message)
+            station.process_message(json_data)
         else:
-            logger.debug("unable to find handler for message from topic %s", message.topic)
+            logger.debug(
+                "unable to find handler for message from topic %s", message.topic
+            )

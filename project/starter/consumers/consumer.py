@@ -2,6 +2,7 @@
 import logging
 
 import confluent_kafka
+from confluent_kafka import Consumer
 from confluent_kafka.avro import AvroConsumer
 from confluent_kafka.avro.serializer import SerializerError
 from tornado import gen
@@ -10,13 +11,14 @@ from tornado import gen
 logger = logging.getLogger(__name__)
 
 
-class Consumer:
+class KafkaConsumer:
     """Defines the base kafka consumer class"""
 
     def __init__(
         self,
         topic_name_pattern,
         message_handler,
+        is_avro=True,
         offset_earliest=False,
         sleep_secs=1.0,
         consume_timeout=0.1,
@@ -40,13 +42,20 @@ class Consumer:
                 #
         }
 
+        # TODO: Create the Consumer, using the appropriate type.
+        if is_avro is True:
+            self.broker_properties["schema.registry.url"] = "http://localhost:8081"
+            #self.consumer = AvroConsumer(...)
+        else:
+            #self.consumer = Consumer(...)
+            pass
+
         #
         #
         # TODO: Configure the AvroConsumer and subscribe to the topics. Make sure to think about
         # how the `on_assign` callback should be invoked.
         #
         #
-        # self.consumer = AvroConsumer( TODO )
         # self.consumer.subscribe( TODO )
 
     def on_assign(self, consumer, partitions):

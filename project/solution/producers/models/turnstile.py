@@ -19,22 +19,14 @@ class Turnstile(Producer):
 
     def __init__(self, station, create_topic=True):
         """Create the Turnstile"""
-        st_name = (
-            station.name.lower()
-            .replace("/", "_and_")
-            .replace(" ", "_")
-            .replace("-", "_")
-            .replace("'", "")
-        )
-
         # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
         # replicas
         super().__init__(
-            f"org.chicago.cta.{station.color.name}.station.{st_name}.turnstile.v1",
+            topic_name="org.chicago.cta.station.turnstile.v1",
             key_schema=Turnstile.key_schema,
             value_schema=Turnstile.value_schema,
             num_partitions=5,
-            num_replicas=2,
+            num_replicas=1,
         )
         self.station = station
         self.turnstile_hardware = TurnstileHardware(station)

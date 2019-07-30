@@ -1,0 +1,3 @@
+- src: sansible.kafka
+- src: sansible.zookeeper
+- src: geerlingguy.postgresql

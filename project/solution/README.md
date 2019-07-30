@@ -49,7 +49,7 @@ To accomplish this, you must complete the following tasks:
 	* A topic is created for each turnstile for each station in Kafka to track the turnstile events
 	* The station emits a `turnstile` event to Kafka whenever the `Turnstile.run()` function is called.
 	* Ensure that events emitted to kafka are paired with the Avro `key` and `value` schemas
-	
+
 ### Step 2: Configure Kafka REST Proxy Producer
 Our partners at the CTA have asked that we also send weather readings into Kafka from their weather hardware. Unfortunately, this hardware is old and we cannot use the Python Client Library due to hardware restrictions. Instead, we are going to use HTTP REST to send the data to Kafka from the hardware using Kafka's REST Proxy.
 
@@ -60,7 +60,7 @@ To accomplish this, you must complete the following tasks:
 	* `status`
 1. Complete the code in `producers/models/weather.py` so that:
 	* A topic is created for weather events
-	* The weather model emits `weather` event to Kafka REST Proxy whenever the `Weather.run()` function is called. 
+	* The weather model emits `weather` event to Kafka REST Proxy whenever the `Weather.run()` function is called.
 		* **NOTE**: When sending HTTP requests to Kafka REST Proxy, be careful to include the correct `Content-Type`. Pay close attention to the [examples in the documentation](https://docs.confluent.io/current/kafka-rest/api.html#post--topics-(string-topic_name)) for more information.
 	* Ensure that events emitted to REST Proxy are paired with the Avro `key` and `value` schemas
 
@@ -75,8 +75,34 @@ To accomplish this, you must complete the following tasks:
 	* Make sure to use the [Landoop Kafka Connect UI](http://localhost:8084) and [Landoop Kafka Topics UI](http://localhost:8085) to check the status and output of the Connector.
 	* To delete a misconfigured connector: `CURL -X DELETE localhost:8083/connectors/stations`
 
+### Step 4: Configure the Faust Stream Processor
+We will leverage Faust Stream Processing to transform the raw Stations table that we ingested from Kafka Connect. The raw format from the database has more data than we need, and the line color information is not conveniently configured. To remediate this, we're going to ingest data from our Kafka Connect topic, and transform the data.
 
-### Step 4: Create Kafka Consumers
+To accomplish this, you must complete the following tasks:
+
+1. Complete the code and configuration in `consumers/faust_stream.py
+
+#### Watch Out!
+
+You must run this Faust processing application with the following command:
+
+`faust -A faust_stream worker -l info`
+
+### Step 5: Configure the KSQL Table
+Next, we will use KSQL to aggregate turnstile data for each of our stations. Recall that when we produced turnstile data, we simply emitted an event, not a count. What would make this data more useful would be to summarize it by station so that downstream applications always have an up-to-date count
+
+To accomplish this, you must complete the following tasks:
+
+1. Complete the queries in `consumers/ksql.py`
+
+#### Tips
+
+* The KSQL CLI is the best place to build your queries. Try `ksql` in your workspace to enter the CLI.
+* You can run this file on its own simply by running `python ksql.py`
+* Made a mistake in table creation? `DROP TABLE <your_table>`. If the CLI asks you to terminate a running query, you can `TERMINATE <query_name>`
+
+
+### Step 6: Create Kafka Consumers
 With all of the data in Kafka, our final task is to consume the data in the web server that is going to serve the transit status pages to our commuters.
 
 To accomplish this, you must complete the following tasks:
@@ -104,6 +130,8 @@ The following directory layout indicates the files that the student is responsib
 
 ├── consumers
 │   ├── consumer.py *
+│   ├── faust_stream.py *
+│   ├── ksql.py *
 │   ├── models
 │   │   ├── lines.py
 │   │   ├── line.py *
@@ -111,6 +139,7 @@ The following directory layout indicates the files that the student is responsib
 │   │   └── weather.py *
 │   ├── requirements.txt
 │   ├── server.py
+│   ├── topic_check.py
 │   └── templates
 │       └── status.html
 └── producers
@@ -154,9 +183,10 @@ Once docker-compose is ready, the following services will be available:
 | REST Proxy | [http://localhost:8082](http://localhost:8082/) | http://rest-proxy:8082/ |
 | Schema Registry | [http://localhost:8081](http://localhost:8081/ ) | http://schema-registry:8081/ |
 | Kafka Connect | [http://localhost:8083](http://localhost:8083) | http://kafka-connect:8083 |
+| KSQL | [http://localhost:8088](http://localhost:8088) | http://ksql:8088 |
 | PostgreSQL | `jdbc:postgresql://localhost:5432/cta` | `jdbc:postgresql://postgres:5432/cta` | `cta_admin` | `chicago` |
 
-Note that to access these services from your own machine, you will always use the `Host URL` column. 
+Note that to access these services from your own machine, you will always use the `Host URL` column.
 
 When configuring services that run within Docker Compose, like **Kafka Connect you must use the Docker URL**. When you configure the JDBC Source Kafka Connector, for example, you will want to use the value from the `Docker URL` column.
 
@@ -176,8 +206,24 @@ However, when you are ready to verify the end-to-end system prior to submission,
 
 Once the simulation is running, you may hit `Ctrl+C` at any time to exit.
 
+#### To run the Faust Stream Processing Application:
+1. `cd consumers`
+2. `virtualenv venv`
+3. `. venv/bin/activate`
+4. `pip install -r requirements.txt`
+5. `faust -A faust_stream worker -l info`
+
+
+#### To run the KSQL Creation Script:
+1. `cd consumers`
+2. `virtualenv venv`
+3. `. venv/bin/activate`
+4. `pip install -r requirements.txt`
+5. `python ksql.py`
+
 #### To run the `consumer`:
 
+** NOTE **: Do not run the consumer until you have reached Step 6!
 1. `cd consumers`
 2. `virtualenv venv`
 3. `. venv/bin/activate`
@@ -185,5 +231,3 @@ Once the simulation is running, you may hit `Ctrl+C` at any time to exit.
 5. `python server.py`
 
 Once the server is running, you may hit `Ctrl+C` at any time to exit.
-
-

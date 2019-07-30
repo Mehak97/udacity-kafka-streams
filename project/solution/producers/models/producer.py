@@ -13,13 +13,11 @@ logger = logging.getLogger(__name__)
 class Producer:
     """Defines and provides common functionality amongst Producers"""
 
+    # Tracks existing topics across all Producer instances
+    existing_topics = set([])
+
     def __init__(
-        self,
-        topic_name,
-        key_schema,
-        value_schema,
-        num_partitions=1,
-        num_replicas=1,
+        self, topic_name, key_schema, value_schema, num_partitions=1, num_replicas=1
     ):
         """Initializes a Producer object with basic settings"""
         self.topic_name = topic_name
@@ -31,16 +29,15 @@ class Producer:
         # TODO: Configure the broker properties below. Make sure to reference the project README
         # and use the Host URL for Kafka and Schema Registry!
         self.broker_properties = {
-            "bootstrap.servers": ",".join(
-                [
-                    "PLAINTEXT://localhost:9092",
-                    "PLAINTEXT://localhost:9093",
-                    "PLAINTEXT://localhost:9094",
-                ]
-            ),
+            "bootstrap.servers": ",".join(["PLAINTEXT://localhost:9092"]),
             "schema.registry.url": "http://localhost:8081",
         }
-        self.create_topic()
+
+        # If the topic does not already exist, try to create it
+        if self.topic_name not in Producer.existing_topics:
+            self.create_topic()
+            Producer.existing_topics.add(self.topic_name)
+
         # TODO: Configure the AvroProducer
         self.producer = AvroProducer(
             self.broker_properties,
@@ -62,9 +59,20 @@ class Producer:
         ):
             logger.info("not recreating existing topic %s", self.topic_name)
             return
-        logger.info("creating topic %s", self.topic_name)
+        logger.info(
+            "creating topic %s with partition %s replicas %s",
+            self.topic_name,
+            self.num_partitions,
+            self.num_replicas,
+        )
         futures = client.create_topics(
-            [NewTopic(self.topic_name, self.num_partitions, self.num_replicas)]
+            [
+                NewTopic(
+                    topic=self.topic_name,
+                    num_partitions=self.num_partitions,
+                    replication_factor=self.num_replicas,
+                )
+            ]
         )
 
         for topic, future in futures.items():

@@ -19,23 +19,15 @@ class Station(Producer):
 
     def __init__(self, station_id, name, color, direction_a=None, direction_b=None):
         self.name = name
-        st_name = (
-            self.name.lower()
-            .replace("/", "_and_")
-            .replace(" ", "_")
-            .replace("-", "_")
-            .replace("'", "")
-        )
 
         # TODO: Complete the below by deciding on a topic name, number of partitions, and number of
         # replicas
-        topic_name = f"org.chicago.cta.{color.name}.station.{st_name}.arrivals.v1"
         super().__init__(
-            topic_name,
+            topic_name="org.chicago.cta.station.arrivals.v1",
             key_schema=Station.key_schema,
             value_schema=Station.value_schema,
-            num_partitions=4,
-            num_replicas=2,
+            num_partitions=5,
+            num_replicas=1,
         )
 
         self.station_id = int(station_id)
@@ -45,7 +37,6 @@ class Station(Producer):
         self.a_train = None
         self.b_train = None
         self.turnstile = Turnstile(self)
-
 
     def run(self, train, direction, prev_station_id, prev_direction):
         """Simulates train arrivals at this station"""

@@ -25,15 +25,20 @@ class Line:
 
     def _build_line_data(self, station_df):
         """Constructs all stations on the line"""
-        stations = station_df["STATION_NAME"].unique()
+        stations = station_df["station_name"].unique()
 
-        station_data = station_df[station_df["STATION_NAME"] == stations[0]]
-        line = [Station(station_data["STATION_ID"].unique()[0], stations[0], self.color)]
+        station_data = station_df[station_df["station_name"] == stations[0]]
+        line = [
+            Station(station_data["station_id"].unique()[0], stations[0], self.color)
+        ]
         prev_station = line[0]
         for station in stations[1:]:
-            station_data = station_df[station_df["STATION_NAME"] == station]
+            station_data = station_df[station_df["station_name"] == station]
             new_station = Station(
-                station_data["STATION_ID"].unique()[0], station, self.color, prev_station
+                station_data["station_id"].unique()[0],
+                station,
+                self.color,
+                prev_station,
             )
             prev_station.dir_b = new_station
             prev_station = new_station

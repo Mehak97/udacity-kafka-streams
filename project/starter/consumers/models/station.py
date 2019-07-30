@@ -1,4 +1,5 @@
 """Contains functionality related to Stations"""
+import json
 import logging
 
 
@@ -18,9 +19,8 @@ class Station:
         self.num_turnstile_entries = 0
 
     @classmethod
-    def from_message(cls, message):
+    def from_message(cls, value):
         """Given a Kafka Station message, creates and returns a station"""
-        value = message.value()
         return Station(value["station_id"], value["station_name"], value["order"])
 
     def handle_departure(self, direction):
@@ -38,16 +38,6 @@ class Station:
         else:
             self.dir_b = status_dict
 
-    def _handle_turnstile(self):
-        """Handles turnstile messages"""
-        self.num_turnstile_entries += 1
-
-    def process_message(self, message):
+    def process_message(self, json_data):
         """Handles arrival and turnstile messages"""
-        logger.info("station process_message is incomplete - skipping")
-        #
-        #
-        # TODO: Check if the message is a turnstile event, and if it is, call
-        # `self._handle_turnstile()
-        #
-        #
+        self.num_turnstile_entries = json_data["COUNT"]

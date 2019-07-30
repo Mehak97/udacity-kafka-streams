@@ -6,22 +6,9 @@ CREATE TABLE stations (
   station_descriptive_name VARCHAR(200) NOT NULL,
   station_id INTEGER NOT NULL,
   "order" INTEGER,
-  ada BOOLEAN NOT NULL,
   red BOOLEAN NOT NULL,
   blue BOOLEAN NOT NULL,
-  green BOOLEAN NOT NULL,
-  brown BOOLEAN NOT NULL,
-  purple BOOLEAN NOT NULL,
-  purple_express BOOLEAN NOT NULL,
-  yellow BOOLEAN NOT NULL,
-  pink BOOLEAN NOT NULL,
-  orange BOOLEAN NOT NULL,
-  location VARCHAR(50),
-  historical_wards_2003_2015 INTEGER,
-  zip_codes INTEGER,
-  community_areas INTEGER,
-  census_tracts INTEGER,
-  wards INTEGER
+  green BOOLEAN NOT NULL
 );
 
 COPY stations(
@@ -32,20 +19,7 @@ COPY stations(
   station_descriptive_name,
   station_id,
   "order",
-  ada,
   red,
   blue,
-  green,
-  brown,
-  purple,
-  purple_express,
-  yellow,
-  pink,
-  orange,
-  location,
-  historical_wards_2003_2015,
-  zip_codes,
-  community_areas,
-  census_tracts,
-  wards
+  green
 ) FROM '/tmp/cta_stations.csv' DELIMITER ',' CSV HEADER;
