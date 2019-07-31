@@ -38,7 +38,7 @@ def configure_connector():
                     "key.converter.schemas.enable": "false",
                     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
                     "value.converter.schemas.enable": "false",
-                    "connection.url": "jdbc:postgresql://postgres:5432/cta",
+                    "connection.url": "jdbc:postgresql://localhost:5432/cta",
                     "connection.user": "cta_admin",
                     "connection.password": "chicago",
                     "table.whitelist": "stations",
