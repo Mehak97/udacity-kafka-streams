@@ -28,8 +28,6 @@ class Purchase:
 
 def produce_sync(topic_name):
     """Produces data synchronously into the Kafka Topic"""
-    # TODO: Configure the producer to use compression, have a client id, and a batch size
-    #       See: https://kafka.apache.org/documentation/#producerconfigs
     p = Producer({"bootstrap.servers": BROKER_URL})
 
     # TODO: Write a synchronous production loop.

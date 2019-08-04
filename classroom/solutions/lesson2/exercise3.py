@@ -32,14 +32,7 @@ class Purchase:
 
 def produce_sync(topic_name):
     """Produces data synchronously into the Kafka Topic"""
-    # TODO: Configure the producer to use compression, have a client id, and a batch size
-    #       See: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
-    p = Producer({
-        "bootstrap.servers": BROKER_URL,
-        "client.id": "exercise-3",
-        "batch.num.messages": 10,
-        "compression.type": "zstd",
-    })
+    p = Producer({"bootstrap.servers": BROKER_URL})
 
     # TODO: Write a synchronous production loop.
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#confluent_kafka.Producer.flush
