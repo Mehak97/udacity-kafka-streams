@@ -37,7 +37,7 @@ class Purchase:
     schema = parse_schema({
         "type": "record",
         "name": "purchase",
-        "namespace": "com.udacity.lesson3.sample2",
+        "namespace": "com.udacity.lesson3.sample3",
         "fields": [
             {"name": "username", "type": "string"},
             {"name": "currency", "type": "string"},
