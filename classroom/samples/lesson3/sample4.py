@@ -39,7 +39,7 @@ class Purchase:
     #
     # TODO: Use confluent avro to load the schema
     #
-    schema = avro.loads("""{
+    schema = ("""{
         "type": "record",
         "name": "purchase",
         "namespace": "com.udacity.lesson3.sample4",
@@ -70,23 +70,23 @@ async def produce(topic_name):
     #
     # TODO: Create a CachedSchemaRegistryClient
     #
-    schema_registry = CachedSchemaRegistryClient({"url": SCHEMA_REGISTRY_URL})
+    # schema_registry = CachedSchemaRegistryClient(...)
 
     #
     # TODO: Use the Avro Producer
     #
-    p = AvroProducer(
+    p = Producer(
         {"bootstrap.servers": BROKER_URL},
-        schema_registry=schema_registry,
+        # TODO
     )
     while True:
         #
-        # TODO: Update Produce to just send the data
+        # TODO: Update Producer to send schema
         #
         p.produce(
             topic=topic_name,
             value=asdict(Purchase()),
-            value_schema=Purchase.schema
+            # TODO
         )
         await asyncio.sleep(1.0)
 
@@ -96,14 +96,14 @@ async def consume(topic_name):
     #
     # TODO: Create a CachedSchemaRegistryClient
     #
-    schema_registry = CachedSchemaRegistryClient({"url": SCHEMA_REGISTRY_URL})
+    #schema_registry = CachedSchemaRegistryClient(...)
 
     #
     # TODO: Use the Avro Consumer
     #
-    c = AvroConsumer(
+    c = Consumer(
         {"bootstrap.servers": BROKER_URL, "group.id": "0"},
-        schema_registry=schema_registry
+        # TODO
     )
     c.subscribe([topic_name])
     while True:
