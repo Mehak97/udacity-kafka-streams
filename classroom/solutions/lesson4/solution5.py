@@ -22,10 +22,22 @@ def produce():
 
     # TODO: Set the appropriate headers
     #       See: https://docs.confluent.io/current/kafka-rest/api.html#content-types
-    headers = {}
-    # TODO: Define the Data
-    data = {}
-    resp = requests.post()
+    headers = {"Content-Type": "application/vnd.kafka.json.v2+json"}
+    # TODO: Define the JSON Payload to b sent to REST Proxy
+    #       To create data, use `asdict(ClickEvent())`
+    #       See: https://docs.confluent.io/current/kafka-rest/api.html#post--topics-(string-topic_name)
+    data = {
+        "records": [{
+            "value": asdict(ClickEvent())
+        }]
+    }
+    # TODO: What URL should be used?
+    #       See: https://docs.confluent.io/current/kafka-rest/api.html#post--topics-(string-topic_name)
+    resp = requests.post(
+        f"{REST_PROXY_URL}/topics/lesson4.solution5.click_events", # TODO
+        data=json.dumps(data),
+        headers=headers
+    )
 
     try:
         resp.raise_for_status()
@@ -36,10 +48,11 @@ def produce():
 
 
 @dataclass
-class Purchase:
-    username: str = field(default_factory=faker.user_name)
-    currency: str = field(default_factory=faker.currency_code)
-    amount: int = field(default_factory=lambda: random.randint(100, 200000))
+class ClickEvent:
+    email: str = field(default_factory=faker.email)
+    timestamp: str = field(default_factory=faker.iso8601)
+    uri: str = field(default_factory=faker.uri)
+    number: int = field(default_factory=lambda: random.randint(0, 999))
 
 
 def main():
