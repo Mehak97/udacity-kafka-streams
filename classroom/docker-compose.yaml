@@ -50,7 +50,7 @@ services:
     environment:
       KAFKA_REST_BOOTSTRAP_SERVERS: "PLAINTEXT://kafka0:19092"
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082/"
-      KAFKA_REST_HOST_NAME: "rest-proxy"
+      KAFKA_REST_HOST_NAME: "localhost"
       KAFKA_REST_SCHEMA_REGISTRY_URL: "http://schema-registry:8081/"
     depends_on:
     - "kafka0"
@@ -92,39 +92,6 @@ services:
       KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081/"
     depends_on:
     - "kafka0"
-    - "schema-registry"
-
-  connect-ui:
-    image: landoop/kafka-connect-ui:0.9.7
-    ports:
-    - "8084:8084"
-    environment:
-      PORT: "8084"
-      PROXY: "true"
-      CONNECT_URL: "http://connect:8083"
-    depends_on:
-    - "connect"
-
-  topics-ui:
-    image: landoop/kafka-topics-ui:0.9.4
-    ports:
-    - "8085:8085"
-    environment:
-      PORT: "8085"
-      PROXY: "true"
-      KAFKA_REST_PROXY_URL: "http://rest-proxy:8082"
-    depends_on:
-    - "rest-proxy"
-
-  schema-registry-ui:
-    image: landoop/schema-registry-ui:0.9.5
-    ports:
-    - "8086:8086"
-    environment:
-      PORT: "8086"
-      PROXY: "true"
-      SCHEMAREGISTRY_URL: "http://schema-registry:8081/"
-    depends_on:
     - "schema-registry"
 
   postgres:
