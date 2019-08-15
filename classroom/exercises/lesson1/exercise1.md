@@ -6,7 +6,7 @@ In this exercise, you will learn how to use the most common Kafka CLI tools.
 
 First, lets see how to list topics that already exist within Kafka.
 
-`kafka-topics --list --bootstrap-server PLAINTEXT://localhost:9092`
+`kafka-topics --list --zookeeper localhost:2181`
 
 When you run this command, you should see output like the following:
 
@@ -22,8 +22,9 @@ connect-status
 
 The `--list` switch tells the `kafka-topics` CLI to list all known topics.
 
-The `--bootstrap-server PLAINTEXT://localhost:9092` switch tells the `kafka-topics` CLI where the
-Kafka server is located.
+The `--zookeeper localhost:2181` switch tells the `kafka-topics` CLI where the
+Zookeeper ensemble Kafka is using is located. Note that in the newest versions of Kafka the
+`--zookeeper` switch is deprecated in favor of a `--bootstrap-server` switch that points to Kafka. The `--zookeeper` switch still works, but will likely be dropped in the next major revision of Kafka.
 
 We haven't created any topics yet, so what you're seeing are system topics that Kafka and other
 Kafka ecosystem tools make use of.
@@ -32,7 +33,7 @@ Kafka ecosystem tools make use of.
 
 Now that we've seen what topics exist, let's create one.
 
-`kafka-topics --create --topic "my-first-topic" --partitions 1 --replication-factor 1 --bootstrap-server PLAINTEXT://localhost:9092`
+`kafka-topics --create --topic "my-first-topic" --partitions 1 --replication-factor 1 --zookeeper localhost:2181`
 
 When you run this command it should silently exit after a few moments.
 
@@ -44,7 +45,7 @@ which we will explore more in the next lesson.
 To check that our topic was successfully created, lets repeat the command to list topics with a
 slight modification:
 
-`kafka-topics --list --bootstrap-server PLAINTEXT://localhost:9092 --topic "my-first-topic"`
+`kafka-topics --list --zookeeper localhost:2181 --topic "my-first-topic"`
 
 Now, a single topic should be printed, like so:
 
@@ -122,6 +123,7 @@ command with the `--delete` switch instead.
 This command does not print any output if its successful. To check that your topic is actually
 delete, list the topics one more time:
 
-`kafka-topics --list --bootstrap-server PLAINTEXT://localhost:9092`
+`kafka-topics --list --zookeeper localhost:2181`
 
 `my-first-topic` should no longer appear in the list of topics.
+
