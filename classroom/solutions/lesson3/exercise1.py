@@ -83,11 +83,7 @@ class ClickEvent:
         email_key = "email" if ClickEvent.num_calls < 10 else "user_email"
         ClickEvent.num_calls += 1
         return json.dumps(
-            {
-                "uri": self.uri,
-                "timestamp": self.timestamp,
-                email_key: self.email,
-            }
+            {"uri": self.uri, "timestamp": self.timestamp, email_key: self.email}
         )
 
     @classmethod

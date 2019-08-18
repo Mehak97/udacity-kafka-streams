@@ -6,11 +6,7 @@ import random
 
 import requests
 from confluent_kafka import avro, Consumer, Producer
-from confluent_kafka.avro import (
-    AvroConsumer,
-    AvroProducer,
-    CachedSchemaRegistryClient
-)
+from confluent_kafka.avro import AvroConsumer, AvroProducer, CachedSchemaRegistryClient
 from faker import Faker
 
 
@@ -18,6 +14,7 @@ faker = Faker()
 REST_PROXY_URL = "http://localhost:8082"
 TOPIC_NAME = "lesson4.solution7.click_events"
 CONSUMER_GROUP = f"solution7-consumer-group-{random.randint(0,10000)}"
+
 
 async def consume():
     """Consumes from REST Proxy"""
@@ -32,12 +29,14 @@ async def consume():
     resp = requests.post(
         f"{REST_PROXY_URL}/consumers/{CONSUMER_GROUP}",
         data=json.dumps(data),
-        headers=headers
+        headers=headers,
     )
     try:
         resp.raise_for_status()
     except:
-        print(f"Failed to create REST proxy consumer: {json.dumps(resp.json(), indent=2)}")
+        print(
+            f"Failed to create REST proxy consumer: {json.dumps(resp.json(), indent=2)}"
+        )
         return
     print("REST Proxy consumer group created")
 
@@ -48,14 +47,14 @@ async def consume():
     #
     data = {}
     resp = requests.post(
-        f"{resp_data['base_uri']}/subscription",
-        data=json.dumps(data),
-        headers=headers
+        f"{resp_data['base_uri']}/subscription", data=json.dumps(data), headers=headers
     )
     try:
         resp.raise_for_status()
     except:
-        print(f"Failed to subscribe REST proxy consumer: {json.dumps(resp.json(), indent=2)}")
+        print(
+            f"Failed to subscribe REST proxy consumer: {json.dumps(resp.json(), indent=2)}"
+        )
         return
     print("REST Proxy consumer subscription created")
     while True:
@@ -68,7 +67,9 @@ async def consume():
         try:
             resp.raise_for_status()
         except:
-            print(f"Failed to fetch records with REST proxy consumer: {json.dumps(resp.json(), indent=2)}")
+            print(
+                f"Failed to fetch records with REST proxy consumer: {json.dumps(resp.json(), indent=2)}"
+            )
             return
         print("Consumed records via REST Proxy:")
         print(f"{json.dumps(resp.json())}")
@@ -82,7 +83,8 @@ class ClickEvent:
     uri: str = field(default_factory=faker.uri)
     number: int = field(default_factory=lambda: random.randint(0, 999))
 
-    schema = avro.loads("""{
+    schema = avro.loads(
+        """{
         "type": "record",
         "name": "click_event",
         "namespace": "com.udacity.lesson3.exercise2",
@@ -92,21 +94,24 @@ class ClickEvent:
             {"name": "uri", "type": "string"},
             {"name": "number", "type": "int"}
         ]
-    }""")
+    }"""
+    )
 
 
 async def produce(topic_name):
     """Produces data into the Kafka Topic"""
-    p = AvroProducer({
-        "bootstrap.servers": "PLAINTEXT://localhost:9092",
-        "schema.registry.url": "http://localhost:8081"
-    })
+    p = AvroProducer(
+        {
+            "bootstrap.servers": "PLAINTEXT://localhost:9092",
+            "schema.registry.url": "http://localhost:8081",
+        }
+    )
     try:
         while True:
             p.produce(
                 topic=topic_name,
                 value=asdict(ClickEvent()),
-                value_schema=ClickEvent.schema
+                value_schema=ClickEvent.schema,
             )
             await asyncio.sleep(0.1)
     except:

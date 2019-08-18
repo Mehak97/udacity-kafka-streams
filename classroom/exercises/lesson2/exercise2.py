@@ -26,9 +26,9 @@ def create_topic(client, topic_name):
     futures = client.create_topics(
         [
             # TODO
-            #NewTopic(
+            # NewTopic(
             #    ...
-            #)
+            # )
         ]
     )
 
@@ -77,15 +77,12 @@ async def produce(topic_name):
     while True:
         p.produce(topic_name, f"iteration {curr_iteration}".encode("utf-8"))
         curr_iteration += 1
-        await asyncio.sleep(.5)
+        await asyncio.sleep(0.5)
 
 
 async def consume(topic_name):
     """Consumes data from the Kafka Topic"""
-    c = Consumer({
-        "bootstrap.servers": BROKER_URL,
-        "group.id": "0"
-    })
+    c = Consumer({"bootstrap.servers": BROKER_URL, "group.id": "0"})
     c.subscribe([topic_name])
     while True:
         message = c.poll(1.0)
@@ -96,7 +93,6 @@ async def consume(topic_name):
         else:
             print(f"consumed message {message.key()}: {message.value()}")
         await asyncio.sleep(2.5)
-
 
 
 if __name__ == "__main__":

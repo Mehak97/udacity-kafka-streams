@@ -9,7 +9,7 @@ REST_PROXY_URL = "http://localhost:8082"
 def get_topics():
     """Gets topics from REST Proxy"""
     # TODO: See: https://docs.confluent.io/current/kafka-rest/api.html#get--topics
-    resp = requests.get() # TODO
+    resp = requests.get()  # TODO
 
     try:
         resp.raise_for_status()
@@ -22,11 +22,10 @@ def get_topics():
     return resp.json()
 
 
-
 def get_topic(topic_name):
     """Get specific details on a topic"""
     # TODO: See: https://docs.confluent.io/current/kafka-rest/api.html#get--topics
-    resp = requests.get() # TODO
+    resp = requests.get()  # TODO
 
     try:
         resp.raise_for_status()
@@ -40,7 +39,7 @@ def get_topic(topic_name):
 def get_brokers():
     """Gets broker information"""
     # TODO See: https://docs.confluent.io/current/kafka-rest/api.html#get--brokers
-    resp = requests.get() #TODO
+    resp = requests.get()  # TODO
 
     try:
         resp.raise_for_status()

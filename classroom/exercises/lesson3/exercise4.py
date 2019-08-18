@@ -4,11 +4,7 @@ import json
 import random
 
 from confluent_kafka import avro, Consumer, Producer
-from confluent_kafka.avro import (
-    AvroConsumer,
-    AvroProducer,
-    CachedSchemaRegistryClient
-)
+from confluent_kafka.avro import AvroConsumer, AvroProducer, CachedSchemaRegistryClient
 from faker import Faker
 
 
@@ -25,7 +21,7 @@ class ClickAttribute:
 
     @classmethod
     def attributes(self):
-        return {faker.uri_page(): ClickAttribute() for _ in range(random.randint(1,5))}
+        return {faker.uri_page(): ClickAttribute() for _ in range(random.randint(1, 5))}
 
 
 @dataclass
@@ -105,9 +101,7 @@ async def consume(topic_name):
     # TODO: Use the Avro Consumer
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/index.html?highlight=loads#confluent_kafka.avro.AvroConsumer
     #
-    c = Consumer(
-        {"bootstrap.servers": BROKER_URL, "group.id": "0"},
-    )
+    c = Consumer({"bootstrap.servers": BROKER_URL, "group.id": "0"})
     c.subscribe([topic_name])
     while True:
         message = c.poll(1.0)

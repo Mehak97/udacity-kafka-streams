@@ -12,23 +12,18 @@ async def produce(topic_name):
     # TODO: Try running the producer with basic settings.
     # TODO: Try running with batch size of 1 and 10 second linger time
     # TODO: Try running with a batch size of 50
-    p = Producer({
-        "bootstrap.servers": BROKER_URL,
-    })
+    p = Producer({"bootstrap.servers": BROKER_URL})
 
     curr_iteration = 0
     while True:
         p.produce(topic_name, f"iteration {curr_iteration}".encode("utf-8"))
         curr_iteration += 1
-        await asyncio.sleep(.1)
+        await asyncio.sleep(0.1)
 
 
 async def consume(topic_name):
     """Consumes data from the Kafka Topic"""
-    c = Consumer({
-        "bootstrap.servers": BROKER_URL,
-        "group.id": "0"
-    })
+    c = Consumer({"bootstrap.servers": BROKER_URL, "group.id": "0"})
     c.subscribe([topic_name])
     while True:
         message = c.poll(1.0)
@@ -38,7 +33,7 @@ async def consume(topic_name):
             print(f"error from consumer {message.error()}")
         else:
             print(f"consumed message {message.key()}: {message.value()}")
-        await asyncio.sleep(.1)
+        await asyncio.sleep(0.1)
 
 
 def main():

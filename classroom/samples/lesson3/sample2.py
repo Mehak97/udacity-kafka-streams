@@ -20,16 +20,18 @@ class Purchase:
     currency: str = field(default_factory=faker.currency_code)
     amount: int = field(default_factory=lambda: random.randint(100, 200000))
 
-    schema = parse_schema({
-        "type": "record",
-        "name": "purchase",
-        "namespace": "com.udacity.lesson3.sample2",
-        "fields": [
-            {"name": "username", "type": "string"},
-            {"name": "currency", "type": "string"},
-            {"name": "amount", "type": "int"},
-        ]
-    })
+    schema = parse_schema(
+        {
+            "type": "record",
+            "name": "purchase",
+            "namespace": "com.udacity.lesson3.sample2",
+            "fields": [
+                {"name": "username", "type": "string"},
+                {"name": "currency", "type": "string"},
+                {"name": "amount", "type": "int"},
+            ],
+        }
+    )
 
     def serialize(self):
         #

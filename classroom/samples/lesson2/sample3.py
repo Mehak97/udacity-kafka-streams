@@ -58,10 +58,10 @@ async def produce_consume(topic_name):
     """Runs the Producer and Consumer tasks"""
     t1 = asyncio.create_task(produce_sync(topic_name))
     t2 = asyncio.create_task(produce_async(topic_name))
-    #t3 = asyncio.create_task(consume(topic_name))
+    # t3 = asyncio.create_task(consume(topic_name))
     await t1
     await t2
-    #await t3
+    # await t3
 
 
 def create_topic(client):
@@ -86,12 +86,14 @@ class Purchase:
     amount: int = field(default_factory=lambda: random.randint(100, 200000))
 
     def to_json(self):
-        return json.dumps({
-            "type": self.producer_type,
-            "username": self.username,
-            "currency": self.currency,
-            "amount": self.amount,
-        })
+        return json.dumps(
+            {
+                "type": self.producer_type,
+                "username": self.username,
+                "currency": self.currency,
+                "amount": self.amount,
+            }
+        )
 
 
 if __name__ == "__main__":

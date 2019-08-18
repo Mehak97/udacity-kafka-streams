@@ -28,7 +28,7 @@ async def consume(topic_name):
         #       any message(s) you consumed
 
         # Do not delete this!
-        await asyncio.sleep(.01)
+        await asyncio.sleep(0.01)
 
 
 def main():
@@ -47,7 +47,7 @@ async def produce(topic_name):
     while True:
         for _ in range(10):
             p.produce(topic_name, Purchase().serialize())
-        await asyncio.sleep(.01)
+        await asyncio.sleep(0.01)
 
 
 async def produce_consume(topic_name):
@@ -65,11 +65,13 @@ class Purchase:
     amount: int = field(default_factory=lambda: random.randint(100, 200000))
 
     def serialize(self):
-        return json.dumps({
-            "username": self.username,
-            "currency": self.currency,
-            "amount": self.amount,
-        })
+        return json.dumps(
+            {
+                "username": self.username,
+                "currency": self.currency,
+                "amount": self.amount,
+            }
+        )
 
 
 if __name__ == "__main__":

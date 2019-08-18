@@ -5,11 +5,7 @@ import random
 
 import requests
 from confluent_kafka import avro, Consumer, Producer
-from confluent_kafka.avro import (
-    AvroConsumer,
-    AvroProducer,
-    CachedSchemaRegistryClient
-)
+from confluent_kafka.avro import AvroConsumer, AvroProducer, CachedSchemaRegistryClient
 from faker import Faker
 
 
@@ -26,17 +22,13 @@ def produce():
     # TODO: Define the JSON Payload to b sent to REST Proxy
     #       To create data, use `asdict(ClickEvent())`
     #       See: https://docs.confluent.io/current/kafka-rest/api.html#post--topics-(string-topic_name)
-    data = {
-        "records": [{
-            "value": asdict(ClickEvent())
-        }]
-    }
+    data = {"records": [{"value": asdict(ClickEvent())}]}
     # TODO: What URL should be used?
     #       See: https://docs.confluent.io/current/kafka-rest/api.html#post--topics-(string-topic_name)
     resp = requests.post(
-        f"{REST_PROXY_URL}/topics/lesson4.solution5.click_events", # TODO
+        f"{REST_PROXY_URL}/topics/lesson4.solution5.click_events",  # TODO
         data=json.dumps(data),
-        headers=headers
+        headers=headers,
     )
 
     try:

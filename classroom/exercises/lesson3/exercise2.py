@@ -21,13 +21,12 @@ class ClickEvent:
     uri: str = field(default_factory=faker.uri)
     number: int = field(default_factory=lambda: random.randint(0, 999))
 
-
     #
     # TODO: Define an Avro Schema for this ClickEvent
     #       See: https://avro.apache.org/docs/1.8.2/spec.html#schema_record
     #       See: https://fastavro.readthedocs.io/en/latest/schema.html?highlight=parse_schema#fastavro-schema
     #
-    #schema = parse_schema(...)
+    # schema = parse_schema(...)
 
     def serialize(self):
         """Serializes the ClickEvent for sending to Kafka"""
@@ -44,11 +43,7 @@ class ClickEvent:
         #       See: https://docs.python.org/3/library/io.html?highlight=bytesio#io.BytesIO
         #
         return json.dumps(
-            {
-                "uri": self.uri,
-                "timestamp": self.timestamp,
-                "email": self.email,
-            }
+            {"uri": self.uri, "timestamp": self.timestamp, "email": self.email}
         )
 
 

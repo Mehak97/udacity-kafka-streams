@@ -5,11 +5,7 @@ import json
 import random
 
 from confluent_kafka import avro, Consumer, Producer
-from confluent_kafka.avro import (
-    AvroConsumer,
-    AvroProducer,
-    CachedSchemaRegistryClient
-)
+from confluent_kafka.avro import AvroConsumer, AvroProducer, CachedSchemaRegistryClient
 from faker import Faker
 
 
@@ -39,7 +35,7 @@ class Purchase:
     #
     # TODO: Use confluent avro to load the schema
     #
-    schema = ("""{
+    schema = """{
         "type": "record",
         "name": "purchase",
         "namespace": "com.udacity.lesson3.sample4",
@@ -62,7 +58,7 @@ class Purchase:
                 }
             }
         ]
-    }""")
+    }"""
 
 
 async def produce(topic_name):
@@ -96,7 +92,7 @@ async def consume(topic_name):
     #
     # TODO: Create a CachedSchemaRegistryClient
     #
-    #schema_registry = CachedSchemaRegistryClient(...)
+    # schema_registry = CachedSchemaRegistryClient(...)
 
     #
     # TODO: Use the Avro Consumer
@@ -118,7 +114,6 @@ async def consume(topic_name):
             except KeyError as e:
                 print(f"Failed to unpack message {e}")
         await asyncio.sleep(1.0)
-
 
 
 def main():

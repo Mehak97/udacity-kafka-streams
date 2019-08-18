@@ -16,6 +16,7 @@ class Purchase:
     def serialize(self):
         return f"{self.username}, {self.currency}, {self.amount}"
 
+
 @dataclass
 class ClickEvent:
     email: str = field(default_factory=faker.email)
@@ -25,7 +26,6 @@ class ClickEvent:
 
     def serialize(self):
         return f"{self.email}, {self.timestamp}, {self.uri}, {self.number}"
-
 
 
 with open("clicks.csv", "w") as f:

@@ -23,11 +23,13 @@ class Purchase:
         """Serializes the object in JSON string format"""
         # TODO: Serializer the Purchase object
         #       See: https://docs.python.org/3/library/json.html#json.dumps
-        return json.dumps({
-            "username": self.username,
-            "currency": self.currency,
-            "amount": self.amount,
-        })
+        return json.dumps(
+            {
+                "username": self.username,
+                "currency": self.currency,
+                "amount": self.amount,
+            }
+        )
 
 
 def produce_sync(topic_name):

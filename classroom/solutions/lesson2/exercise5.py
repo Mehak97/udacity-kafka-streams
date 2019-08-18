@@ -13,11 +13,13 @@ async def consume(topic_name):
     await asyncio.sleep(2.5)
 
     # TODO: Set the offset reset to earliest
-    c = Consumer({
-        "bootstrap.servers": BROKER_URL,
-        "group.id": "0",
-        "auto.offset.reset": "earliest",
-    })
+    c = Consumer(
+        {
+            "bootstrap.servers": BROKER_URL,
+            "group.id": "0",
+            "auto.offset.reset": "earliest",
+        }
+    )
 
     # TODO: Configure the on_assign callback
     c.subscribe([topic_name], on_assign=on_assign)
@@ -30,7 +32,7 @@ async def consume(topic_name):
             print(f"error from consumer {message.error()}")
         else:
             print(f"consumed message {message.key()}: {message.value()}")
-        await asyncio.sleep(.1)
+        await asyncio.sleep(0.1)
 
 
 def on_assign(consumer, partitions):
@@ -61,7 +63,7 @@ async def produce(topic_name):
     while True:
         p.produce(topic_name, f"iteration {curr_iteration}".encode("utf-8"))
         curr_iteration += 1
-        await asyncio.sleep(.1)
+        await asyncio.sleep(0.1)
 
 
 async def produce_consume(topic_name):

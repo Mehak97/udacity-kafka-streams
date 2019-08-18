@@ -15,6 +15,7 @@ KAFKA_CONNECT_URL = "http://localhost:8083/connectors"
 CONNECTOR_NAME = "sample4"
 TOPIC_NAME = "sample4.purchases"
 
+
 def configure_connector():
     """Calls Kafka Connect to create the Connector"""
     print("creating or updating kafka connect connector...")
@@ -34,20 +35,20 @@ def configure_connector():
         headers={"Content-Type": "application/json"},
         data=json.dumps(
             {
-                "name": "purchases-sink-jdbc", # TODO
+                "name": "purchases-sink-jdbc",  # TODO
                 "config": {
-                    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector", # TODO
-                    "topics": TOPIC_NAME, #TODO
-                    "table.name.format": "public", # TODO
-                    "auto.create": "true", # TODO
-                    "pk.mode": "kafka", # TODO
+                    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",  # TODO
+                    "topics": TOPIC_NAME,  # TODO
+                    "table.name.format": "public",  # TODO
+                    "auto.create": "true",  # TODO
+                    "pk.mode": "kafka",  # TODO
                     "tasks.max": 1,
                     "connection.url": "jdbc:postgresql://localhost:5432/classroom",
                     "connection.user": "root",
                     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
                     "key.converter.schemas.enable": "false",
                     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-                    "value.converter.schemas.enable": "false"
+                    "value.converter.schemas.enable": "false",
                 },
             }
         ),
@@ -60,7 +61,9 @@ def configure_connector():
         print(f"failed creating connector: {json.dumps(resp.json(), indent=2)}")
         exit(1)
     print("connector created successfully.")
-    print("Use `psql classroom -c 'SELECT * FROM connect_purchases'` to see your table!")
+    print(
+        "Use `psql classroom -c 'SELECT * FROM connect_purchases'` to see your table!"
+    )
 
 
 @dataclass
@@ -68,6 +71,7 @@ class Purchase:
     username: str = field(default_factory=faker.user_name)
     currency: str = field(default_factory=faker.currency_code)
     amount: int = field(default_factory=lambda: random.randint(100, 200000))
+
 
 async def produce(topic_name):
     """Produces data into the Kafka Topic"""

@@ -21,7 +21,7 @@ class ClickAttribute:
 
     @classmethod
     def attributes(self):
-        return {faker.uri_page(): ClickAttribute() for _ in range(random.randint(1,5))}
+        return {faker.uri_page(): ClickAttribute() for _ in range(random.randint(1, 5))}
 
 
 @dataclass
@@ -36,31 +36,33 @@ class ClickEvent:
     # TODO: Update this Avro schema to include a map of attributes
     #       See: https://avro.apache.org/docs/1.8.2/spec.html#Maps
     #
-    schema = parse_schema({
-        "type": "record",
-        "name": "click_event",
-        "namespace": "com.udacity.lesson3.exercise2",
-        "fields": [
-            {"name": "email", "type": "string"},
-            {"name": "timestamp", "type": "string"},
-            {"name": "uri", "type": "string"},
-            {"name": "number", "type": "int"},
-            {
-                "name": "attributes",
-                "type": {
-                    "type": "map",
-                    "values": {
-                        "type": "record",
-                        "name": "attribute",
-                        "fields": [
-                            {"name": "element", "type": "string"},
-                            {"name": "content", "type": "string"}
-                        ]
-                    }
-                }
-            }
-        ]
-    })
+    schema = parse_schema(
+        {
+            "type": "record",
+            "name": "click_event",
+            "namespace": "com.udacity.lesson3.exercise2",
+            "fields": [
+                {"name": "email", "type": "string"},
+                {"name": "timestamp", "type": "string"},
+                {"name": "uri", "type": "string"},
+                {"name": "number", "type": "int"},
+                {
+                    "name": "attributes",
+                    "type": {
+                        "type": "map",
+                        "values": {
+                            "type": "record",
+                            "name": "attribute",
+                            "fields": [
+                                {"name": "element", "type": "string"},
+                                {"name": "content", "type": "string"},
+                            ],
+                        },
+                    },
+                },
+            ],
+        }
+    )
 
     def serialize(self):
         """Serializes the ClickEvent for sending to Kafka"""

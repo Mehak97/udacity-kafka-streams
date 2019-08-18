@@ -14,11 +14,13 @@ async def consume(topic_name):
 
     # TODO: Set the auto offset reset to earliest
     #       See: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
-    c = Consumer({
-        "bootstrap.servers": BROKER_URL,
-        "group.id": "0",
-        # TODO
-    })
+    c = Consumer(
+        {
+            "bootstrap.servers": BROKER_URL,
+            "group.id": "0",
+            # TODO
+        }
+    )
 
     # TODO: Configure the on_assign callback
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/index.html?highlight=partition#confluent_kafka.Consumer.subscribe
@@ -32,7 +34,7 @@ async def consume(topic_name):
             print(f"error from consumer {message.error()}")
         else:
             print(f"consumed message {message.key()}: {message.value()}")
-        await asyncio.sleep(.1)
+        await asyncio.sleep(0.1)
 
 
 def on_assign(consumer, partitions):
@@ -65,7 +67,7 @@ async def produce(topic_name):
     while True:
         p.produce(topic_name, f"iteration {curr_iteration}".encode("utf-8"))
         curr_iteration += 1
-        await asyncio.sleep(.1)
+        await asyncio.sleep(0.1)
 
 
 async def produce_consume(topic_name):

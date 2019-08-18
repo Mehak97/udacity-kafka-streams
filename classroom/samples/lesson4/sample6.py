@@ -5,11 +5,7 @@ import random
 
 import requests
 from confluent_kafka import avro, Consumer, Producer
-from confluent_kafka.avro import (
-    AvroConsumer,
-    AvroProducer,
-    CachedSchemaRegistryClient
-)
+from confluent_kafka.avro import AvroConsumer, AvroProducer, CachedSchemaRegistryClient
 from faker import Faker
 
 
@@ -32,20 +28,13 @@ def produce():
 
     # TODO: Set the appropriate headers for AVRO
     #       See: https://docs.confluent.io/current/kafka-rest/api.html#content-types
-    headers = {
-        "Content-Type": "application/vnd.kafka.avro.v2+json"
-    }
+    headers = {"Content-Type": "application/vnd.kafka.avro.v2+json"}
     # TODO: Define the Data
-    data = {
-        "value_schema": AVRO_SCHEMA,
-        "records": [{
-            "value": asdict(Purchase()),
-        }]
-    }
+    data = {"value_schema": AVRO_SCHEMA, "records": [{"value": asdict(Purchase())}]}
     resp = requests.post(
         f"{REST_PROXY_URL}/topics/lesson4.sample6.purchases",
         data=json.dumps(data),
-        headers=headers
+        headers=headers,
     )
 
     try:

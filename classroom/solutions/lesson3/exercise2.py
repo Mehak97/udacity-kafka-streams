@@ -26,17 +26,19 @@ class ClickEvent:
     #       See: https://avro.apache.org/docs/1.8.2/spec.html#schema_record
     #       See: https://fastavro.readthedocs.io/en/latest/schema.html?highlight=parse_schema#fastavro-schema
     #
-    schema = parse_schema({
-        "type": "record",
-        "name": "click_event",
-        "namespace": "com.udacity.lesson3.exercise2",
-        "fields": [
-            {"name": "email", "type": "string"},
-            {"name": "timestamp", "type": "string"},
-            {"name": "uri", "type": "string"},
-            {"name": "number", "type": "int"}
-        ]
-    })
+    schema = parse_schema(
+        {
+            "type": "record",
+            "name": "click_event",
+            "namespace": "com.udacity.lesson3.exercise2",
+            "fields": [
+                {"name": "email", "type": "string"},
+                {"name": "timestamp", "type": "string"},
+                {"name": "uri", "type": "string"},
+                {"name": "number", "type": "int"},
+            ],
+        }
+    )
 
     def serialize(self):
         """Serializes the ClickEvent for sending to Kafka"""

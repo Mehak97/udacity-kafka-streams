@@ -22,7 +22,6 @@ def get_topics():
     return resp.json()
 
 
-
 def get_topic(topic_name):
     """Get specific details on a topic"""
     # TODO: See: https://docs.confluent.io/current/kafka-rest/api.html#get--topics

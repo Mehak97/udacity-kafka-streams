@@ -5,11 +5,7 @@ import random
 
 import requests
 from confluent_kafka import avro, Consumer, Producer
-from confluent_kafka.avro import (
-    AvroConsumer,
-    AvroProducer,
-    CachedSchemaRegistryClient
-)
+from confluent_kafka.avro import AvroConsumer, AvroProducer, CachedSchemaRegistryClient
 from faker import Faker
 
 
@@ -30,9 +26,7 @@ def produce():
     # TODO: What URL should be used?
     #       See: https://docs.confluent.io/current/kafka-rest/api.html#post--topics-(string-topic_name)
     resp = requests.post(
-        f"{REST_PROXY_URL}/", # TODO
-        data=json.dumps(data),
-        headers=headers
+        f"{REST_PROXY_URL}/", data=json.dumps(data), headers=headers  # TODO
     )
 
     try:

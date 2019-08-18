@@ -4,11 +4,7 @@ import json
 import random
 
 from confluent_kafka import avro, Consumer, Producer
-from confluent_kafka.avro import (
-    AvroConsumer,
-    AvroProducer,
-    CachedSchemaRegistryClient
-)
+from confluent_kafka.avro import AvroConsumer, AvroProducer, CachedSchemaRegistryClient
 from faker import Faker
 
 
@@ -25,7 +21,7 @@ class ClickAttribute:
 
     @classmethod
     def attributes(self):
-        return {faker.uri_page(): ClickAttribute() for _ in range(random.randint(1,5))}
+        return {faker.uri_page(): ClickAttribute() for _ in range(random.randint(1, 5))}
 
 
 @dataclass
@@ -40,7 +36,8 @@ class ClickEvent:
     # TODO: Load the schema using the Confluent avro loader
     #       See: https://github.com/confluentinc/confluent-kafka-python/blob/master/confluent_kafka/avro/load.py#L23
     #
-    schema = avro.loads("""{
+    schema = avro.loads(
+        """{
         "type": "record",
         "name": "click_event",
         "namespace": "com.udacity.lesson3.solution4",
@@ -64,7 +61,8 @@ class ClickEvent:
                 }
             }
         ]
-    }""")
+    }"""
+    )
 
 
 async def produce(topic_name):
@@ -87,9 +85,7 @@ async def produce(topic_name):
         #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/index.html?highlight=loads#confluent_kafka.avro.AvroProducer
         #
         p.produce(
-            topic=topic_name,
-            value=asdict(ClickEvent()),
-            value_schema=ClickEvent.schema,
+            topic=topic_name, value=asdict(ClickEvent()), value_schema=ClickEvent.schema
         )
         await asyncio.sleep(1.0)
 
@@ -106,7 +102,7 @@ async def consume(topic_name):
     #
     c = AvroConsumer(
         {"bootstrap.servers": BROKER_URL, "group.id": "0"},
-        schema_registry=schema_registry
+        schema_registry=schema_registry,
     )
     c.subscribe([topic_name])
     while True:

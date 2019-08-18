@@ -18,15 +18,12 @@ async def produce(topic_name):
     p = Producer({"bootstrap.servers": BROKER_URL})
     while True:
         p.produce(topic_name, Purchase().serialize())
-        await asyncio.sleep(.01)
+        await asyncio.sleep(0.01)
 
 
 async def consume(topic_name):
     """Consumes data from the Kafka Topic"""
-    c = Consumer({
-        "bootstrap.servers": BROKER_URL,
-        "group.id": "0"
-    })
+    c = Consumer({"bootstrap.servers": BROKER_URL, "group.id": "0"})
     c.subscribe([topic_name])
     while True:
         #
@@ -42,7 +39,7 @@ async def consume(topic_name):
             print(f"error from consumer {message.error()}")
         else:
             print(f"consumed message {message.key()}: {message.value()}")
-        await asyncio.sleep(.01)
+        await asyncio.sleep(0.01)
 
 
 def main():
@@ -70,11 +67,13 @@ class Purchase:
     amount: int = field(default_factory=lambda: random.randint(100, 200000))
 
     def serialize(self):
-        return json.dumps({
-            "username": self.username,
-            "currency": self.currency,
-            "amount": self.amount,
-        })
+        return json.dumps(
+            {
+                "username": self.username,
+                "currency": self.currency,
+                "amount": self.amount,
+            }
+        )
 
 
 if __name__ == "__main__":

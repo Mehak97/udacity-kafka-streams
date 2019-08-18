@@ -12,13 +12,13 @@ async def produce(topic_name):
     """Produces data into the Kafka Topic"""
     # TODO: Configure the producer with `bootstrap.servers`
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#producer
-    #p = Producer(...)
+    # p = Producer(...)
 
     curr_iteration = 0
     while True:
         # TODO: Produce a message to the topic
         #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#confluent_kafka.Producer.produce
-        #p.produce(...)
+        # p.produce(...)
 
         curr_iteration += 1
         await asyncio.sleep(1)
@@ -28,11 +28,11 @@ async def consume(topic_name):
     """Consumes data from the Kafka Topic"""
     # TODO: Configure the consumer with `bootstrap.servers` and `group.id`
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#consumer
-    #c = Consumer(...)
+    # c = Consumer(...)
 
     # TODO: Subscribe to the topic
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#confluent_kafka.Consumer.subscribe
-    #c.subscribe(...)
+    # c.subscribe(...)
 
     while True:
         # TODO: Poll for a message
@@ -66,14 +66,14 @@ def main():
     """Runs the exercise"""
     # TODO: Configure the AdminClient with `bootstrap.servers`
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#confluent_kafka.admin.AdminClient
-    #client = AdminClient(...)
+    # client = AdminClient(...)
     # TODO: Create a NewTopic object. Don't forget to set partitions and replication factor to 1!
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#confluent_kafka.admin.NewTopic
-    #topic = NewTopic(...)
+    # topic = NewTopic(...)
 
     # TODO: Using `client`, create the topic
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#confluent_kafka.admin.AdminClient.create_topics
-    #client.create_topics(...)
+    # client.create_topics(...)
 
     try:
         asyncio.run(produce_consume())
@@ -82,7 +82,7 @@ def main():
     finally:
         # TODO: Using `client`, delete the topic
         #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#confluent_kafka.admin.AdminClient.delete_topics
-        #client.delete_topics(...)
+        # client.delete_topics(...)
         pass
 
 

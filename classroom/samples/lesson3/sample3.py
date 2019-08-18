@@ -34,30 +34,32 @@ class Purchase:
     #
     # TODO: Update the schema to incorporate line items
     #
-    schema = parse_schema({
-        "type": "record",
-        "name": "purchase",
-        "namespace": "com.udacity.lesson3.sample3",
-        "fields": [
-            {"name": "username", "type": "string"},
-            {"name": "currency", "type": "string"},
-            {"name": "amount", "type": "int"},
-            {
-                "name": "line_items",
-                "type": {
-                    "type": "array",
-                    "items": {
-                        "type": "record",
-                        "name": "line_item",
-                        "fields": [
-                            {"name": "description", "type": "string"},
-                            {"name": "amount", "type": "int"}
-                        ]
-                    }
-                }
-            }
-        ]
-    })
+    schema = parse_schema(
+        {
+            "type": "record",
+            "name": "purchase",
+            "namespace": "com.udacity.lesson3.sample3",
+            "fields": [
+                {"name": "username", "type": "string"},
+                {"name": "currency", "type": "string"},
+                {"name": "amount", "type": "int"},
+                {
+                    "name": "line_items",
+                    "type": {
+                        "type": "array",
+                        "items": {
+                            "type": "record",
+                            "name": "line_item",
+                            "fields": [
+                                {"name": "description", "type": "string"},
+                                {"name": "amount", "type": "int"},
+                            ],
+                        },
+                    },
+                },
+            ],
+        }
+    )
 
     def serialize(self):
         out = io.BytesIO()

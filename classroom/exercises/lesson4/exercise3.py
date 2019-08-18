@@ -6,6 +6,7 @@ import requests
 
 KAFKA_CONNECT_URL = "http://localhost:8083/connectors"
 
+
 def configure_connector():
     """Calls Kafka Connect to create the Connector"""
     print("creating or updating kafka connect connector...")
@@ -28,20 +29,20 @@ def configure_connector():
         headers={"Content-Type": "application/json"},
         data=json.dumps(
             {
-                "name": "clicks-jdbc", # TODO
+                "name": "clicks-jdbc",  # TODO
                 "config": {
-                    "connector.class": "", # TODO
-                    "topic.prefix": "", # TODO
-                    "mode": "", # TODO
-                    "incrementing.column.name": "", # TODO
-                    "table.whitelist": "", # TODO
+                    "connector.class": "",  # TODO
+                    "topic.prefix": "",  # TODO
+                    "mode": "",  # TODO
+                    "incrementing.column.name": "",  # TODO
+                    "table.whitelist": "",  # TODO
                     "tasks.max": 1,
                     "connection.url": "jdbc:postgresql://localhost:5432/classroom",
                     "connection.user": "root",
                     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
                     "key.converter.schemas.enable": "false",
                     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-                    "value.converter.schemas.enable": "false"
+                    "value.converter.schemas.enable": "false",
                 },
             }
         ),

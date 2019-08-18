@@ -10,9 +10,7 @@ BROKER_URL = "PLAINTEXT://localhost:9092"
 def topic_exists(client, topic_name):
     """Checks if the given topic exists"""
     topic_metadata = client.list_topics(timeout=5)
-    return topic_name in set(
-        t.topic for t in iter(topic_metadata.topics.values())
-    )
+    return topic_name in set(t.topic for t in iter(topic_metadata.topics.values()))
 
 
 def create_topic(client, topic_name):
@@ -29,7 +27,7 @@ def create_topic(client, topic_name):
                     "delete.retention.ms": "2000",
                     "file.delete.delay.ms": "2000",
                 },
-           )
+            )
         ]
     )
 
@@ -74,15 +72,12 @@ async def produce(topic_name):
     while True:
         p.produce(topic_name, f"iteration {curr_iteration}".encode("utf-8"))
         curr_iteration += 1
-        await asyncio.sleep(.5)
+        await asyncio.sleep(0.5)
 
 
 async def consume(topic_name):
     """Consumes data from the Kafka Topic"""
-    c = Consumer({
-        "bootstrap.servers": BROKER_URL,
-        "group.id": "0"
-    })
+    c = Consumer({"bootstrap.servers": BROKER_URL, "group.id": "0"})
     c.subscribe([topic_name])
     while True:
         message = c.poll(1.0)
@@ -93,7 +88,6 @@ async def consume(topic_name):
         else:
             print(f"consumed message {message.key()}: {message.value()}")
         await asyncio.sleep(2.5)
-
 
 
 if __name__ == "__main__":

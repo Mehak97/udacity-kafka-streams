@@ -6,6 +6,7 @@ import requests
 KAFKA_CONNECT_URL = "http://localhost:8083/connectors"
 CONNECTOR_NAME = "exercise2"
 
+
 def configure_connector():
     """Calls Kafka Connect to create the Connector"""
     print("creating or updating kafka connect connector...")
@@ -25,16 +26,16 @@ def configure_connector():
         headers={"Content-Type": "application/json"},
         data=json.dumps(
             {
-                "name": "", # TODO
+                "name": "",  # TODO
                 "config": {
-                    "connector.class": "", # TODO
-                    "topic": "", # TODO
-                    "tasks.max": 0, # TODO
+                    "connector.class": "",  # TODO
+                    "topic": "",  # TODO
+                    "tasks.max": 0,  # TODO
                     "file": f"/tmp/{CONNECTOR_NAME}.log",
                     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
                     "key.converter.schemas.enable": "false",
                     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-                    "value.converter.schemas.enable": "false"
+                    "value.converter.schemas.enable": "false",
                 },
             }
         ),

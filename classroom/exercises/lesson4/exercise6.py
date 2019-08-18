@@ -5,11 +5,7 @@ import random
 
 import requests
 from confluent_kafka import avro, Consumer, Producer
-from confluent_kafka.avro import (
-    AvroConsumer,
-    AvroProducer,
-    CachedSchemaRegistryClient
-)
+from confluent_kafka.avro import AvroConsumer, AvroProducer, CachedSchemaRegistryClient
 from faker import Faker
 
 
@@ -38,14 +34,12 @@ def produce():
     #       See: https://docs.confluent.io/current/kafka-rest/api.html#post--topics-(string-topic_name)
     data = {
         # TODO
-        "records": [{
-            "value": asdict(ClickEvent())
-        }]
+        "records": [{"value": asdict(ClickEvent())}]
     }
     resp = requests.post(
-        f"{REST_PROXY_URL}/topics/lesson4.exercise6.click_events", # TODO
+        f"{REST_PROXY_URL}/topics/lesson4.exercise6.click_events",  # TODO
         data=json.dumps(data),
-        headers=headers
+        headers=headers,
     )
 
     try:

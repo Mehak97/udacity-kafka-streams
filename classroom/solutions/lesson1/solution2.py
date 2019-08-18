@@ -28,10 +28,9 @@ async def consume(topic_name):
     """Consumes data from the Kafka Topic"""
     # TODO: Configure the consumer with `bootstrap.servers` and `group.id`
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#consumer
-    c = Consumer({
-        "bootstrap.servers": BROKER_URL,
-        "group.id": "my-first-consumer-group"
-    })
+    c = Consumer(
+        {"bootstrap.servers": BROKER_URL, "group.id": "my-first-consumer-group"}
+    )
 
     # TODO: Subscribe to the topic
     #       See: https://docs.confluent.io/current/clients/confluent-kafka-python/#confluent_kafka.Consumer.subscribe

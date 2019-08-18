@@ -24,10 +24,12 @@ def produce(topic_name):
     #
     #       See: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
     #
-    p = Producer({
-        "bootstrap.servers": BROKER_URL,
-        # TODO
-    })
+    p = Producer(
+        {
+            "bootstrap.servers": BROKER_URL,
+            # TODO
+        }
+    )
 
     while True:
         p.produce(topic_name, Purchase().serialize())
@@ -63,11 +65,13 @@ class Purchase:
 
     def serialize(self):
         """Serializes the object in JSON string format"""
-        return json.dumps({
-            "username": self.username,
-            "currency": self.currency,
-            "amount": self.amount,
-        })
+        return json.dumps(
+            {
+                "username": self.username,
+                "currency": self.currency,
+                "amount": self.amount,
+            }
+        )
 
 
 if __name__ == "__main__":
