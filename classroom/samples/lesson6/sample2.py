@@ -21,7 +21,7 @@ purchases_topic = app.topic("com.udacity.streams.purchases", value_type=Purchase
 # TODO: What happens if a field is missing during deserialization? Say, fraud_certainty?
 #
 @app.agent(purchases_topic)
-async def order(purchases):
+async def purchase(purchases):
     async for purchase in purchases:
         print(json.dumps(asdict(purchase), indent=2))
 

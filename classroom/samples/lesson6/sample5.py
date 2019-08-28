@@ -29,13 +29,11 @@ purchases_topic = app.topic("com.udacity.streams.purchases", value_type=Purchase
 purchases_stream = app.stream(...)
 
 
-@app.agent(purchases_topic)
-async def purchase(purchases):
-    #
-    # TODO: Enumerate the purchases stream
-    #
-    async for purchase in purchases_stream:
-        print(json.dumps(asdict(purchase), indent=2))
+#
+# TODO: Enumerate the purchases stream
+#
+async for purchase in purchases_stream:
+    print(json.dumps(asdict(purchase), indent=2))
 
 
 if __name__ == "__main__":
